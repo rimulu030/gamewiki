@@ -10,8 +10,8 @@ from PyQt6.QtWidgets import QSystemTrayIcon, QMenu
 from PyQt6.QtGui import QIcon, QAction
 from PyQt6.QtCore import QObject, pyqtSignal
 
-from src.game_wiki_tooltip.utils import package_file
-from src.game_wiki_tooltip.i18n import t
+from src.game_wiki_tooltip.core.utils import package_file
+from src.game_wiki_tooltip.core.i18n import t
 
 logger = logging.getLogger(__name__)
 

@@ -12,7 +12,7 @@ from pathlib import Path
 import re
 
 # Import i18n for internationalization
-from src.game_wiki_tooltip.i18n import t
+from src.game_wiki_tooltip.core.i18n import t
 from .rag_config import RAGConfig, get_default_config
 
 logger = logging.getLogger(__name__)

@@ -13,7 +13,7 @@ import win32gui
 
 from PyQt6.QtCore import QObject, pyqtSignal, QTimer
 
-from src.game_wiki_tooltip.config import SettingsManager
+from src.game_wiki_tooltip.core.config import SettingsManager
 
 MOD_MAP: Final[Dict[str, int]] = {
     "Alt": win32con.MOD_ALT,

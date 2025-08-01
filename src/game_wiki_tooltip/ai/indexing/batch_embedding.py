@@ -79,7 +79,7 @@ def get_resource_path(relative_path: str) -> Path:
     return resource_path
 
 # 导入翻译函数
-from src.game_wiki_tooltip.i18n import t
+from src.game_wiki_tooltip.core.i18n import t
 
 # Import Gemini embedding client
 try:

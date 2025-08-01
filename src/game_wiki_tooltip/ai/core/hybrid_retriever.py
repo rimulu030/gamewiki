@@ -14,10 +14,10 @@ import numpy as np
 import logging
 from typing import List, Dict, Any, Optional, Tuple
 from pathlib import Path
-from .enhanced_bm25_indexer import EnhancedBM25Indexer, BM25UnavailableError
+from src.game_wiki_tooltip.ai.indexing.enhanced_bm25_indexer import EnhancedBM25Indexer, BM25UnavailableError
 from .unified_query_processor import process_query_unified, UnifiedQueryResult
 from .rag_config import LLMSettings
-from src.game_wiki_tooltip.i18n import t
+from src.game_wiki_tooltip.core.i18n import t
 from .rag_config import RAGConfig
 
 logger = logging.getLogger(__name__)

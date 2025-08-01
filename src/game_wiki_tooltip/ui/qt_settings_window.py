@@ -17,9 +17,9 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import Qt, pyqtSignal
 from PyQt6.QtGui import QFont, QIcon
 
-from src.game_wiki_tooltip.config import SettingsManager
-from src.game_wiki_tooltip.utils import package_file, APPDATA_DIR
-from src.game_wiki_tooltip.i18n import init_translations, get_translation_manager, t
+from src.game_wiki_tooltip.core.config import SettingsManager
+from src.game_wiki_tooltip.core.utils import package_file, APPDATA_DIR
+from src.game_wiki_tooltip.core.i18n import init_translations, get_translation_manager, t
 
 logger = logging.getLogger(__name__)
 
@@ -250,7 +250,7 @@ class QtSettingsWindow(QMainWindow):
         self.language_combo.setFixedWidth(200)
         
         # Populate language options
-        from src.game_wiki_tooltip.i18n import get_supported_languages
+        from src.game_wiki_tooltip.core.i18n import get_supported_languages
         supported_languages = get_supported_languages()
         for lang_code, lang_name in supported_languages.items():
             self.language_combo.addItem(lang_name, lang_code)
@@ -710,7 +710,7 @@ class QtSettingsWindow(QMainWindow):
             selected_language = self.language_combo.itemData(current_index)
             
             # Update translation manager
-            from src.game_wiki_tooltip.i18n import set_language
+            from src.game_wiki_tooltip.core.i18n import set_language
             set_language(selected_language)
             
             # Update all UI text

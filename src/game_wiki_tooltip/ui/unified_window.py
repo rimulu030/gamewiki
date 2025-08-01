@@ -18,11 +18,11 @@ from typing import Optional, Dict, Any, List, Callable
 from enum import Enum
 from dataclasses import dataclass, field
 
-from src.game_wiki_tooltip.i18n import t
-from src.game_wiki_tooltip.config import WindowGeometryConfig, ChatOnlyGeometry, FullContentGeometry, WebViewGeometry
+from src.game_wiki_tooltip.core.i18n import t
+from src.game_wiki_tooltip.core.config import WindowGeometryConfig, ChatOnlyGeometry, FullContentGeometry, WebViewGeometry
 
-# Import from window_component module
-from src.game_wiki_tooltip.window_component import (
+# Import from ui components module
+from .components import (
     convert_markdown_to_html,
     AssistantController,
     WikiView,
@@ -66,7 +66,7 @@ except ImportError:
     BLUR_WINDOW_AVAILABLE = False
 
 # Import graphics compatibility for Windows version detection
-from src.game_wiki_tooltip.graphics_compatibility import WindowsGraphicsCompatibility
+from src.game_wiki_tooltip.integration.graphics_compatibility import WindowsGraphicsCompatibility
 
 class QuickAccessPopup(QWidget):
     """Horizontal popup widget for quick access shortcuts"""
@@ -2079,7 +2079,7 @@ class UnifiedAssistantWindow(QMainWindow):
     def _ensure_history_manager(self):
         """Ensure history manager is initialized"""
         if self.history_manager is None:
-            from src.game_wiki_tooltip.history_manager import WebHistoryManager
+            from src.game_wiki_tooltip.core.history_manager import WebHistoryManager
             self.history_manager = WebHistoryManager()
             print("📚 History manager initialized")
         
@@ -2216,9 +2216,8 @@ class UnifiedAssistantWindow(QMainWindow):
         self.history_button.clicked.connect(self.show_history_menu)
         
         # Load history icon
-        import pathlib
-        base_path = pathlib.Path(__file__).parent.parent.parent  # Go up to project root
-        history_icon_path = str(base_path / "src" / "game_wiki_tooltip" / "assets" / "icons" / "refresh-ccw-clock-svgrepo-com.svg")
+        from src.game_wiki_tooltip.core.utils import package_file
+        history_icon_path = str(package_file("icons/refresh-ccw-clock-svgrepo-com.svg"))
         history_icon = load_svg_icon(history_icon_path, color="#111111", size=20)
         self.history_button.setIcon(history_icon)
         self.history_button.setIconSize(QSize(20, 20))
@@ -2232,7 +2231,7 @@ class UnifiedAssistantWindow(QMainWindow):
         self.quick_access_button.clicked.connect(self.on_quick_access_clicked)
         
         # Load quick access icon
-        external_icon_path = str(base_path / "src" / "game_wiki_tooltip" / "assets" / "icons" / "globe-alt-1-svgrepo-com.svg")
+        external_icon_path = str(package_file("icons/globe-alt-1-svgrepo-com.svg"))
         external_icon = load_svg_icon(external_icon_path, color="#111111", size=20)
         self.quick_access_button.setIcon(external_icon)
         self.quick_access_button.setIconSize(QSize(20, 20))
@@ -2245,7 +2244,7 @@ class UnifiedAssistantWindow(QMainWindow):
         self.mode_button.clicked.connect(self.show_mode_menu)
         
         # Load search icon
-        search_icon_path = str(base_path / "src" / "game_wiki_tooltip" / "assets" / "icons" / "search-alt-1-svgrepo-com.svg")
+        search_icon_path = str(package_file("icons/search-alt-1-svgrepo-com.svg"))
         search_icon = load_svg_icon(search_icon_path, color="#111111", size=20)
         self.mode_button.setIcon(search_icon)
         self.mode_button.setIconSize(QSize(20, 20))
@@ -2257,7 +2256,7 @@ class UnifiedAssistantWindow(QMainWindow):
         self.send_button.clicked.connect(self.on_send_clicked)
         
         # Load send icon
-        send_icon_path = str(base_path / "src" / "game_wiki_tooltip" / "assets" / "icons" / "arrow-circle-up-svgrepo-com.svg")
+        send_icon_path = str(package_file("icons/arrow-circle-up-svgrepo-com.svg"))
         send_icon = load_svg_icon(send_icon_path, color="#111111", size=20)
         self.send_button.setIcon(send_icon)
         self.send_button.setIconSize(QSize(20, 20))
@@ -2277,7 +2276,7 @@ class UnifiedAssistantWindow(QMainWindow):
         self.task_flow_button.hide()  # Initially hidden
         
         # Load task flow icon
-        task_icon_path = str(base_path / "src" / "game_wiki_tooltip" / "assets" / "icons" / "layers-svgrepo-com.svg")
+        task_icon_path = str(package_file("icons/layers-svgrepo-com.svg"))
         task_icon = load_svg_icon(task_icon_path, color="#111111", size=20)
         self.task_flow_button.setIcon(task_icon)
         self.task_flow_button.setIconSize(QSize(20, 20))
@@ -3282,7 +3281,7 @@ class UnifiedAssistantWindow(QMainWindow):
         
     def set_mode(self, mode: str):
         """Set the input mode (auto, wiki, ai or url)"""
-        from src.game_wiki_tooltip.i18n import t
+        from src.game_wiki_tooltip.core.i18n import t
         
         self.current_mode = mode
         if mode == "url":
@@ -3396,7 +3395,7 @@ class UnifiedAssistantWindow(QMainWindow):
             for shortcut in visible_shortcuts:
                 try:
                     # Use package_file to get correct path
-                    from src.game_wiki_tooltip.utils import package_file
+                    from src.game_wiki_tooltip.core.utils import package_file
                     icon_path = ""
                     if shortcut.get('icon'):
                         try:
@@ -3480,9 +3479,7 @@ class UnifiedAssistantWindow(QMainWindow):
             html_filename = config['html_files'].get(current_language, config['html_files']['en'])
             
             # Get HTML file path
-            import pathlib
-            base_path = pathlib.Path(__file__).parent
-            html_path = base_path / "assets" / "html" / html_filename
+            html_path = package_file(f"html/{html_filename}")
             
             if html_path.exists():
                 print(f"Loading task flow from: {html_path}")
@@ -3734,7 +3731,7 @@ class UnifiedAssistantWindow(QMainWindow):
     def show_mode_menu(self):
         """Show search mode menu with intelligent positioning"""
         mode_menu = QMenu(self)  # Use standard QMenu with parent
-        from src.game_wiki_tooltip.i18n import t
+        from src.game_wiki_tooltip.core.i18n import t
         
         auto_action = mode_menu.addAction(t("search_mode_auto"))
         auto_action.triggered.connect(lambda: self.set_mode("auto"))
@@ -3783,9 +3780,8 @@ class UnifiedAssistantWindow(QMainWindow):
         
         # Get icon paths
         import pathlib
-        base_path = pathlib.Path(__file__).parent.parent.parent
-        pause_icon_path = str(base_path / "src" / "game_wiki_tooltip" / "assets" / "icons" / "pause-circle-svgrepo-com.svg")
-        send_icon_path = str(base_path / "src" / "game_wiki_tooltip" / "assets" / "icons" / "arrow-circle-up-svgrepo-com.svg")
+        pause_icon_path = str(package_file("icons/pause-circle-svgrepo-com.svg"))
+        send_icon_path = str(package_file("icons/arrow-circle-up-svgrepo-com.svg"))
         
         if is_generating:
             # Switch to stop mode with pause icon

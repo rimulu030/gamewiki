@@ -54,7 +54,7 @@ def get_resource_path(relative_path: str) -> Path:
 
 # Import batch embedding processor
 try:
-    from .batch_embedding import BatchEmbeddingProcessor
+    from ..indexing.batch_embedding import BatchEmbeddingProcessor
     BATCH_EMBEDDING_AVAILABLE = True
 except ImportError:
     BATCH_EMBEDDING_AVAILABLE = False
@@ -84,7 +84,7 @@ except ImportError:
 
 # Import Gemini summarizer
 try:
-    from .gemini_summarizer import create_gemini_summarizer, SummarizationConfig
+    from ..models.gemini_summarizer import create_gemini_summarizer, SummarizationConfig
     GEMINI_AVAILABLE = True
 except ImportError:
     GEMINI_AVAILABLE = False
@@ -92,7 +92,7 @@ except ImportError:
 
 # Import intent-aware reranker
 try:
-    from .intent_aware_reranker import IntentAwareReranker
+    from ..retrieval.intent_aware_reranker import IntentAwareReranker
     RERANKER_AVAILABLE = True
 except ImportError:
     RERANKER_AVAILABLE = False
@@ -101,7 +101,7 @@ except ImportError:
 # Import hybrid retriever and BM25 error class
 try:
     from .hybrid_retriever import HybridSearchRetriever, VectorRetrieverAdapter
-    from .enhanced_bm25_indexer import BM25UnavailableError
+    from ..indexing.enhanced_bm25_indexer import BM25UnavailableError
     HYBRID_RETRIEVER_AVAILABLE = True
 except ImportError as e:
     HybridSearchRetriever = None

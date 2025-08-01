@@ -17,14 +17,14 @@ from PyQt6.QtWidgets import QApplication, QMessageBox, QDialog, QVBoxLayout, QHB
 from PyQt6.QtCore import QTimer, pyqtSignal, QObject, pyqtSlot, QAbstractNativeEventFilter, Qt
 from PyQt6.QtGui import QIcon
 
-from src.game_wiki_tooltip.config import SettingsManager, GameConfigManager
-from src.game_wiki_tooltip.qt_tray_icon import QtTrayIcon
-from src.game_wiki_tooltip.qt_settings_window import QtSettingsWindow
-from src.game_wiki_tooltip.qt_hotkey_manager import QtHotkeyManager, HotkeyError
-from src.game_wiki_tooltip.assistant_integration import IntegratedAssistantController
-from src.game_wiki_tooltip.utils import APPDATA_DIR, package_file
-from src.game_wiki_tooltip.i18n import init_translations, t
-from src.game_wiki_tooltip.graphics_compatibility import apply_windows_10_fixes, set_application_attributes, get_graphics_debug_info, set_qt_attributes_before_app_creation
+from src.game_wiki_tooltip.core.config import SettingsManager, GameConfigManager
+from .qt_tray_icon import QtTrayIcon
+from .qt_settings_window import QtSettingsWindow
+from .qt_hotkey_manager import QtHotkeyManager, HotkeyError
+from src.game_wiki_tooltip.integration.assistant_integration import IntegratedAssistantController
+from src.game_wiki_tooltip.core.utils import APPDATA_DIR, package_file
+from src.game_wiki_tooltip.core.i18n import init_translations, t
+from src.game_wiki_tooltip.integration.graphics_compatibility import apply_windows_10_fixes, set_application_attributes, get_graphics_debug_info, set_qt_attributes_before_app_creation
 
 # 热键常量 - 与test_hotkey_only.py保持一致
 MOD_CONTROL = 0x0002
@@ -697,7 +697,7 @@ class GameWikiApp(QObject):
             
             # Update translation manager with new language
             current_language = settings.get('language', 'en')
-            from src.game_wiki_tooltip.i18n import set_language
+            from src.game_wiki_tooltip.core.i18n import set_language
             set_language(current_language)
             
             # Reload games configuration (for language change or wiki URL updates)
@@ -928,7 +928,7 @@ def run_main_app(qapp, splash_screen=None):
     
     # Apply graphics fixes
     logger.info("Applying PyQt6 Windows graphics compatibility fixes...")
-    from src.game_wiki_tooltip.graphics_compatibility import (
+    from src.game_wiki_tooltip.integration.graphics_compatibility import (
         apply_windows_10_fixes, get_graphics_debug_info,
         set_qt_attributes_before_app_creation, GraphicsMode
     )
@@ -1000,7 +1000,7 @@ def main():
     # Step 2: Show splash screen IMMEDIATELY
     splash = None
     try:
-        from src.game_wiki_tooltip.splash_screen import SplashScreen, FirstRunSplashScreen
+        from .splash_screen import SplashScreen, FirstRunSplashScreen
         import sys
         import os
         
@@ -1008,7 +1008,7 @@ def main():
         if hasattr(sys, '_MEIPASS'):
             # Running from PyInstaller bundle
             # For onedir mode, check if settings file exists (more reliable indicator)
-            from src.game_wiki_tooltip.utils import APPDATA_DIR
+            from src.game_wiki_tooltip.core.utils import APPDATA_DIR
             settings_path = APPDATA_DIR / "settings.json"
             marker_file = APPDATA_DIR / '.first_run_complete'
             

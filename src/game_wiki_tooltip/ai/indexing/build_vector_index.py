@@ -21,7 +21,7 @@ from typing import List
 project_root = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(project_root))
 
-from src.game_wiki_tooltip.ai.batch_embedding import BatchEmbeddingProcessor, process_game_knowledge
+from src.game_wiki_tooltip.ai.indexing.batch_embedding import BatchEmbeddingProcessor, process_game_knowledge
 
 def setup_logging(verbose: bool = False):
     """Set up logging configuration"""

@@ -14,10 +14,10 @@ if sys.platform != "win32":
 # Check if we should use bootstrap (for packaged exe)
 if hasattr(sys, '_MEIPASS') or os.environ.get('GAMEWIKI_USE_BOOTSTRAP'):
     # Use bootstrap for immediate splash in packaged mode
-    from .qt_app_bootstrap import main
+    from .ui.qt_app_bootstrap import main
 else:
     # Use normal entry for development
-    from .qt_app import main
+    from .ui.qt_app import main
 
 if __name__ == '__main__':
     main()

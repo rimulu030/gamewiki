@@ -12,7 +12,7 @@ import logging
 from dataclasses import dataclass, field, asdict
 from typing import Dict, List, Any, Optional
 
-from src.game_wiki_tooltip.utils import APPDATA_DIR, package_file
+from .utils import APPDATA_DIR, package_file
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -180,7 +180,7 @@ class SettingsManager:
     def _load(self) -> AppSettings:
         """Load settings file"""
         # Get default settings file path
-        default_settings_path = package_file("settings.json")
+        default_settings_path = package_file("config/settings.json")
         
         # If target file does not exist, copy default file (remove time-based check to prevent overwriting user settings in exe)
         if not self.path.exists():
@@ -306,7 +306,7 @@ class GameConfigManager:
         """Ensure language-specific configuration files are copied to appdata directory"""
         try:
             # Language configuration files to copy
-            language_files = ['games_en.json', 'games_zh.json', 'games.json']
+            language_files = ['config/games_en.json', 'config/games_zh.json', 'config/games.json']
             
             for filename in language_files:
                 try:
@@ -316,8 +316,9 @@ class GameConfigManager:
                         logger.warning(f"Language config file not found in assets: {filename}")
                         continue
                     
-                    # Target file path (appdata directory)
-                    target_path = self.path.parent / filename
+                    # Target file path (appdata directory) - extract just filename
+                    target_filename = pathlib.Path(filename).name
+                    target_path = self.path.parent / target_filename
                     
                     # If target file does not exist, or source file is updated, copy
                     if not target_path.exists() or source_path.stat().st_mtime > target_path.stat().st_mtime:

@@ -12,8 +12,8 @@ def package_file(relative_path: str) -> Path:
         return base_path / relative_path
     else:
         # Development environment, use simple relative path approach for Windows compatibility
-        current_dir = Path(__file__).parent
-        assets_dir = current_dir / "assets"
+        current_dir = Path(__file__).parent  # core directory
+        assets_dir = current_dir.parent / "assets"  # go up to game_wiki_tooltip then to assets
         return assets_dir / relative_path
 
 # ---- constants ----

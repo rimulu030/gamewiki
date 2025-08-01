@@ -8,7 +8,7 @@ import os
 from pathlib import Path
 from typing import Dict, Optional, Any
 
-from src.game_wiki_tooltip.utils import APPDATA_DIR, package_file
+from src.game_wiki_tooltip.core.utils import APPDATA_DIR, package_file
 
 logger = logging.getLogger(__name__)
 
