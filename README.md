@@ -5,7 +5,7 @@
 ![Windows](https://img.shields.io/badge/Platform-Windows%2010%2F11-blue?logo=windows)
 ![Python](https://img.shields.io/badge/Python-3.8%2B-green?logo=python)
 ![Games](https://img.shields.io/badge/AI%20Games-4%20Supported-orange?logo=gamepad)
-![License](https://img.shields.io/badge/License-MIT-yellow)
+![License](https://img.shields.io/badge/License-GPL3.0-yellow)
 [![GitHub Release](https://img.shields.io/github/v/release/rimulu030/gamewiki?include_prereleases)](https://github.com/rimulu030/gamewiki/releases/download/v1.0.0/GameWikiAssistant_Portable_onedir.zip)
 
 👉 **[中文说明](README.zh-CN.md)** | **[Quick Start](#-quick-install)** | **[Download Latest Release](https://github.com/rimulu030/gamewiki/releases/download/v1.0.0/GameWikiAssistant_Portable_onedir.zip)** |  **[Join Our Discord](https://discord.gg/WdZVcnQ2)**
@@ -17,9 +17,11 @@ Never alt-tab out of your game again! Get instant answers, build guides, and wik
 ### 🎯 Key Features
 
 - **🔥 One Hotkey, All Answers** - Press `Ctrl+Q` to instantly overlay wiki/AI chat without leaving your game
-- **🤖 AI Game Expert** - Powered by Google Gemini with local knowledge bases for smart Q&A. 
+- **🤖 AI Game Expert** - Powered by **Google Gemini** with local knowledge bases for smart Q&A. 
 
-_"The Gemini API "free tier" is offered through the API service with lower rate limits for testing purposes. Google AI Studio usage is **completely free** in all available countries" - according to Gemini API docs_
+To use the AI chatbot feature, you will need to have a google account and get gemini API from Google AI Studio.
+
+_"The **Gemini API** "free tier" is offered through the API service with lower [rate limits](https://ai.google.dev/gemini-api/docs/rate-limits#free-tier) for testing purposes. Google AI Studio usage is **completely free** in all available countries" - according to [Gemini API docs](https://ai.google.dev/gemini-api/docs/pricing)_
 ## 📸 Screenshots
 - Use as AI assitant
 
@@ -50,7 +52,7 @@ git clone https://github.com/rimulu030/gamewiki.git
 cd gamewiki
 pip install -r requirements.txt
 
-# Configure API key for AI features (optional)
+# Configure API key for AI features
 set GEMINI_API_KEY=your_key_here  # Windows
 
 # Run
@@ -74,7 +76,7 @@ Quick wiki access for 100+ games including: VALORANT, CS2, Monster Hunter, Stard
 
 ### First Launch Setup
 1. **Hotkey Setup**: Choose your preferred activation key (default: `Ctrl+Q`)
-2. **API Key** (Optional): Add Gemini API key for enhanced AI features
+2. **API Key** : Add Gemini API key for AI features
 3. **Game Detection**: Automatic - just launch your game!
 
 ### Advanced Settings
@@ -112,7 +114,7 @@ We love contributions! Whether it's:
 
 ## 📄 License
 
-MIT License - See [LICENSE](LICENSE) file
+With the usage of Pyqt6, we use GPL3.0 License - See [LICENSE](LICENSE) file
 
 ## 🙏 Acknowledgments
 
