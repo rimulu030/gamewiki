@@ -5,10 +5,10 @@
 ![Windows](https://img.shields.io/badge/平台-Windows%2010%2F11-blue?logo=windows)
 ![Python](https://img.shields.io/badge/Python-3.8%2B-green?logo=python)
 ![Games](https://img.shields.io/badge/AI游戏-4款支持-orange?logo=gamepad)
-![License](https://img.shields.io/badge/许可证-MIT-yellow)
+![License](https://img.shields.io/badge/许可证-GPL3.0-yellow)
 [![GitHub Release](https://img.shields.io/github/v/release/rimulu030/gamewiki?include_prereleases)](https://github.com/rimulu030/gamewiki/releases)
 
-👉 **[English](README.md)** | **[快速开始](#-快速安装)** | **[下载最新版本](https://github.com/rimulu030/gamewiki/releases/latest)**
+👉 **[English](README.md)** | **[快速开始](#-快速安装)** | **[下载最新版本](https://github.com/rimulu030/gamewiki/releases/latest)** | **[Join Our Discord](https://discord.gg/WdZVcnQ2)**
 
 ## ✨ 为什么选择GameWikiTooltip？
 
@@ -19,7 +19,9 @@
 - **🔥 一键呼出，即问即答** - 按下`Ctrl+Q`，无需切屏即可查询攻略
 - **🤖 AI游戏专家** - 基于Google Gemini + 本地知识库的智能问答
 
-_“Gemini API“免费层级”通过 API 服务提供，具有较低的速率限制，仅用于测试目的。在所有支持的国家/地区，Google AI Studio 的使用**完全免费**。”_ -根据Gemini API文档
+为使用AI问答功能，你需要一个谷歌账号并从Google AI Studio获取GEMINI API
+
+_“Gemini API“免费层级”通过 API 服务提供，具有较低的[速率限制](https://ai.google.dev/gemini-api/docs/rate-limits#free-tier)，仅用于测试目的。在所有支持的国家/地区，Google AI Studio 的使用**完全免费**。”_ -根据[Gemini API文档](https://ai.google.dev/gemini-api/docs/pricing)
 
 ## 🚀 快速安装
 
@@ -36,7 +38,7 @@ git clone https://github.com/rimulu030/gamewiki.git
 cd gamewiki
 pip install -r requirements.txt
 
-# 配置AI功能的API密钥（可选）
+# 配置AI功能的API密钥
 set GEMINI_API_KEY=your_key_here  # Windows
 export GEMINI_API_KEY=your_key_here  # Linux/Mac
 
@@ -116,14 +118,12 @@ Quick access to webs
 
 ## 📄 许可证
 
-MIT许可证 - 详见[LICENSE](LICENSE)文件
+根据pyqt6库的使用要求，我们使用了GPL3.0许可证 - 详见[LICENSE](LICENSE)文件
 
 ## 🙏 致谢
 
 - **Google Gemini AI** - 提供智能响应能力
-- **FAISS** - 超快向量搜索引擎
 - **游戏社区** - 提供Wiki内容和知识
-- **贡献者们** - 让这个工具越来越好
 
 ---
 
@@ -131,6 +131,6 @@ MIT许可证 - 详见[LICENSE](LICENSE)文件
 
 **⭐ 如果这个工具帮助了你的游戏体验，请给我们Star！**
 
-[报告问题](https://github.com/rimulu030/gamewiki/issues) · [功能请求](https://github.com/rimulu030/gamewiki/discussions) · [Discord社区](https://discord.gg/gamewiki)
+[报告问题](https://github.com/rimulu030/gamewiki/issues) · [Discord社区](https://discord.gg/WdZVcnQ2)
 
 </div>
