@@ -14,7 +14,8 @@ logger = logging.getLogger(__name__)
 # 支持的语言
 SUPPORTED_LANGUAGES = {
     'en': 'English',
-    'zh': '中文'
+    'zh': '中文',
+    'ru': 'Русский'
 }
 
 # 默认语言
@@ -330,7 +331,88 @@ class TranslationManager:
             
             # Game detection messages
             "game_not_detected": "No game detected. Please trigger the hotkey while in a game, or add the game to wiki settings if it's not in the default list.",
-            "game_not_supported": "The current window '{window}' is not a supported game. Please switch to a supported game or add it in settings."
+            "game_not_supported": "The current window '{window}' is not a supported game. Please switch to a supported game or add it in settings.",
+
+            # Wiki view
+            "btn_back_to_chat": "< Back to Chat",
+            "tooltip_nav_back": "Back to the previous page",
+            "tooltip_nav_forward": "Forward to the next page",
+            "tooltip_refresh": "Refresh page",
+            "placeholder_url_bar": "Enter URL and press Enter to navigate...",
+            "btn_open_browser": "Open in Browser",
+            "tooltip_close_window": "Close window",
+            "label_loading": "Loading...",
+
+            # Unified window
+            "placeholder_search": "search for information...",
+            "tooltip_history": "History",
+            "tooltip_quick_access": "Go to external website",
+            "tooltip_search_mode": "Search Mode",
+            "tooltip_voice_input": "Voice Input",
+            "tooltip_voice_unavailable": "Voice input not available. Install vosk and sounddevice.",
+            "tooltip_settings": "Settings",
+            "placeholder_enter_url": "Enter URL...",
+            "placeholder_search_query": "Enter search query...",
+            "placeholder_enter_question": "Enter question...",
+            "placeholder_enter_message": "Enter message...",
+            "placeholder_listening": "Listening...",
+            "placeholder_stop_generation": "Click Stop to cancel generation...",
+            "btn_open": "Open",
+            "clear_history": "Clear History",
+            "tooltip_history_cleared": "History cleared",
+            "tooltip_view_history": "View browsing history",
+            "history_more": "... and {count} more",
+
+            # API key dialog
+            "dialog_ai_unavailable_title": "AI Features Unavailable",
+            "dialog_ai_unavailable_msg": "AI guide features require both API keys to function properly:\n\nMissing: {keys}\n\n⚠️ Note: Gemini API alone cannot provide high-quality RAG functionality.\nJina vector search is essential for complete AI guide features.\n\nYou can still use Wiki search without API keys.",
+            "btn_configure_api_keys": "Configure API Keys",
+            "btn_maybe_later": "Maybe Later",
+            "checkbox_dont_remind": "Don't remind me again (Wiki search only)",
+
+            # Settings window - additional
+            "tab_general_settings": "General Settings",
+            "tab_quick_access": "Quick Access",
+            "shortcuts_title": "Manage Quick Access Websites",
+            "shortcuts_info": "Add or remove quick access buttons for your favorite websites.\nThese buttons will appear above the input field for easy access.",
+            "btn_add_website": "Add Website",
+            "btn_edit_selected": "Edit Selected",
+            "btn_hide_show_selected": "Hide/Show Selected",
+            "btn_remove_selected": "Remove Selected",
+            "btn_add": "Add",
+            "btn_edit": "Edit",
+            "btn_remove": "Remove",
+            "label_system_default": "System Default",
+            "label_audio_unavailable": "Audio devices unavailable (import error)",
+            "btn_unavailable": "Unavailable",
+            "btn_refresh_failed": "Refresh failed",
+            "checkbox_auto_voice_hotkey": "Auto-start voice input on hotkey",
+            "tooltip_auto_voice_hotkey": "When enabled, voice input will automatically start when opening the window with hotkey",
+            "checkbox_auto_send_voice": "Auto-send voice input when recording stops",
+            "tooltip_auto_send_voice": "When enabled, voice input will automatically be sent when you stop recording",
+
+            # Chinese voice model
+            "label_chinese_model_not_installed": "Chinese voice model not installed",
+            "btn_download_chinese_model_140mb": "Download Chinese Voice Model (~140MB)",
+            "label_chinese_model_info": "Required for Chinese voice input. Download once and use offline.",
+            "label_downloading_chinese_model": "Downloading Chinese voice model...",
+            "label_chinese_model_installed": "Chinese voice model installed",
+            "btn_redownload_chinese_model": "Re-download Chinese Model",
+            "btn_download_chinese_model_42mb": "Download Chinese Voice Model (~42MB)",
+            "label_chinese_model_download_success": "Chinese voice model installed successfully",
+            "label_chinese_model_download_failed": "Failed to download Chinese voice model",
+            "label_voice_not_available": "Voice recognition not available. Please install vosk.",
+
+            # Splash screen
+            "splash_starting": "Starting...",
+            "splash_loading_core": "Loading core modules...",
+            "splash_loading_ui": "Loading UI components...",
+            "splash_loading_settings": "Loading settings...",
+            "splash_loading_ai": "Loading AI modules...",
+            "splash_loading_text": "Initializing text processing...",
+            "splash_loading_games": "Loading game database...",
+            "splash_almost_ready": "Almost ready...",
+            "splash_starting_app": "Starting application..."
         }
     
     def _create_language_translations(self, language: str) -> Dict[str, str]:
@@ -518,7 +600,353 @@ class TranslationManager:
                 
                 # 游戏检测消息
                 "game_not_detected": "未检测到游戏。请在游戏中触发热键，或如果游戏不在默认列表中，请在设置中添加。",
-                "game_not_supported": "当前窗口 '{window}' 不是支持的游戏。请切换到支持的游戏或在设置中添加。"
+                "game_not_supported": "当前窗口 '{window}' 不是支持的游戏。请切换到支持的游戏或在设置中添加。",
+
+                # Wiki视图
+                "btn_back_to_chat": "< 返回聊天",
+                "tooltip_nav_back": "后退到上一页",
+                "tooltip_nav_forward": "前进到下一页",
+                "tooltip_refresh": "刷新页面",
+                "placeholder_url_bar": "输入网址并按回车键访问...",
+                "btn_open_browser": "在浏览器中打开",
+                "tooltip_close_window": "关闭窗口",
+                "label_loading": "加载中...",
+
+                # 统一窗口
+                "placeholder_search": "搜索信息...",
+                "tooltip_history": "历史记录",
+                "tooltip_quick_access": "前往外部网站",
+                "tooltip_search_mode": "搜索模式",
+                "tooltip_voice_input": "语音输入",
+                "tooltip_voice_unavailable": "语音输入不可用。请安装vosk和sounddevice。",
+                "tooltip_settings": "设置",
+                "placeholder_enter_url": "输入网址...",
+                "placeholder_search_query": "输入搜索内容...",
+                "placeholder_enter_question": "输入问题...",
+                "placeholder_enter_message": "输入消息...",
+                "placeholder_listening": "正在聆听...",
+                "placeholder_stop_generation": "点击停止按钮取消生成...",
+                "btn_open": "打开",
+                "clear_history": "清除历史",
+                "tooltip_history_cleared": "历史已清除",
+                "tooltip_view_history": "查看浏览历史",
+                "history_more": "... 还有 {count} 条",
+
+                # API密钥对话框
+                "dialog_ai_unavailable_title": "AI功能不可用",
+                "dialog_ai_unavailable_msg": "AI攻略功能需要API密钥才能正常工作：\n\n缺少：{keys}\n\n⚠️ 注意：仅有Gemini API无法提供高质量的RAG功能。\nJina向量搜索对于完整的AI攻略功能至关重要。\n\n您仍然可以在没有API密钥的情况下使用Wiki搜索。",
+                "btn_configure_api_keys": "配置API密钥",
+                "btn_maybe_later": "稍后再说",
+                "checkbox_dont_remind": "不再提醒（仅使用Wiki搜索）",
+
+                # 设置窗口 - 额外
+                "tab_general_settings": "常规设置",
+                "tab_quick_access": "快捷访问",
+                "shortcuts_title": "管理快捷访问网站",
+                "shortcuts_info": "添加或删除常用网站的快捷访问按钮。\n这些按钮将显示在输入框上方，方便快速访问。",
+                "btn_add_website": "添加网站",
+                "btn_edit_selected": "编辑选中",
+                "btn_hide_show_selected": "隐藏/显示选中",
+                "btn_remove_selected": "删除选中",
+                "btn_add": "添加",
+                "btn_edit": "编辑",
+                "btn_remove": "删除",
+                "label_system_default": "系统默认",
+                "label_audio_unavailable": "音频设备不可用（导入错误）",
+                "btn_unavailable": "不可用",
+                "btn_refresh_failed": "刷新失败",
+                "checkbox_auto_voice_hotkey": "热键打开时自动启动语音输入",
+                "tooltip_auto_voice_hotkey": "启用后，使用热键打开窗口时将自动开始语音输入",
+                "checkbox_auto_send_voice": "录音停止时自动发送语音输入",
+                "tooltip_auto_send_voice": "启用后，停止录音时将自动发送语音输入",
+
+                # 中文语音模型
+                "label_chinese_model_not_installed": "中文语音模型未安装",
+                "btn_download_chinese_model_140mb": "下载中文语音模型 (~140MB)",
+                "label_chinese_model_info": "中文语音输入所需。下载一次即可离线使用。",
+                "label_downloading_chinese_model": "正在下载中文语音模型...",
+                "label_chinese_model_installed": "中文语音模型已安装",
+                "btn_redownload_chinese_model": "重新下载中文模型",
+                "btn_download_chinese_model_42mb": "下载中文语音模型 (~42MB)",
+                "label_chinese_model_download_success": "中文语音模型安装成功",
+                "label_chinese_model_download_failed": "中文语音模型下载失败",
+                "label_voice_not_available": "语音识别不可用。请安装vosk。",
+
+                # 启动画面
+                "splash_starting": "正在启动...",
+                "splash_loading_core": "正在加载核心模块...",
+                "splash_loading_ui": "正在加载界面组件...",
+                "splash_loading_settings": "正在加载设置...",
+                "splash_loading_ai": "正在加载AI模块...",
+                "splash_loading_text": "正在初始化文本处理...",
+                "splash_loading_games": "正在加载游戏数据库...",
+                "splash_almost_ready": "即将就绪...",
+                "splash_starting_app": "正在启动应用程序..."
+            }
+        elif language == 'ru':
+            return {
+                # Settings window
+                "settings_title": "GameWiki Assistant — Настройки",
+                "hotkey_tab": "Горячие клавиши",
+                "api_tab": "Настройка API",
+                "language_tab": "Язык",
+                "wiki_tab": "Wiki",
+                "apply_button": "Сохранить и применить",
+                "cancel_button": "Отмена",
+
+                # Hotkey settings
+                "hotkey_title": "Настройка глобальных горячих клавиш",
+                "modifiers_label": "Модификаторы:",
+                "main_key_label": "Основная клавиша:",
+                "hotkey_tips": "Подсказки:\n"
+                             "• Нажмите горячую клавишу в игре, чтобы вызвать AI-ассистента\n"
+                             "• Некоторые игры могут не поддерживать определённые комбинации клавиш\n"
+                             "• Рекомендуется: Ctrl + буквенная клавиша",
+
+                # API settings
+                "api_title": "Настройка API-ключей",
+                "google_api_label": "Google (Gemini) API Key:",
+                "google_api_placeholder": "Введите ваш Gemini API-ключ",
+                "google_api_help": "Получить Gemini API Key",
+                "jina_api_label": "Jina API Key (необязательно):",
+                "jina_api_placeholder": "Введите ваш Jina API-ключ",
+                "jina_api_help": "Получить Jina API Key",
+                "api_tips": "Примечания:\n"
+                           "• Gemini API Key необходим для AI-диалогов и генерации контента\n"
+                           "• API-ключи безопасно хранятся в локальных файлах конфигурации",
+
+                # Language settings
+                "language_title": "Настройки языка",
+                "language_label": "Язык интерфейса:",
+                "language_tips": "Примечания:\n"
+                               "• Смена языка повлияет на весь интерфейс приложения\n"
+                               "• Источники Wiki будут скорректированы в соответствии с выбранным языком\n"
+                               "• Для полного применения изменений требуется перезапуск",
+
+                # Audio settings
+                "audio_title": "Настройки звука",
+                "audio_input_device_label": "Устройство ввода звука:",
+                "refresh_devices_button": "Обновить устройства",
+                "refreshing_devices": "Обновление...",
+                "refresh_cooldown": "Слишком быстро! Подождите...",
+                "refresh_complete": "Обновлено!",
+
+                # Wiki settings
+                "wiki_title": "Настройка Wiki-адресов",
+                "wiki_description": "При поиске по Wiki мы ограничиваем результаты указанными сайтами, чтобы исключить посторонний контент.",
+                "wiki_search_label": "Поиск:",
+                "wiki_search_placeholder": "напр., civ",
+                "wiki_edit_button": "Изменить",
+                "wiki_reset_button": "Сбросить по умолчанию",
+                "wiki_tips": "Совет: измените базовый URL для каждой игры, чтобы использовать предпочитаемый Wiki-источник.",
+                "wiki_tips_with_warning": "Совет: измените базовый URL для каждой игры, чтобы использовать предпочитаемый Wiki-источник.<br><b>Важно: название игры должно точно совпадать с заголовком окна игры!</b><br><b>Примечание: для полного применения изменений языка к Wiki-ссылкам требуется перезапуск.</b>",
+                "wiki_select_game": "Выберите игру для редактирования",
+                "wiki_select_game_remove": "Выберите игру для удаления",
+                "wiki_edit_title": "Изменить Wiki-адрес",
+                "wiki_edit_prompt": "Введите новый Wiki-адрес для {game}:",
+                "wiki_add_title": "Добавить запись Wiki",
+                "wiki_add_game_prompt": "Введите точное название окна игры:",
+                "wiki_add_url_prompt": "Введите Wiki-адрес для {game}:",
+                "wiki_game_exists": "Эта игра уже есть в списке",
+                "wiki_remove_confirm_title": "Подтверждение удаления",
+                "wiki_remove_confirm_message": "Вы уверены, что хотите удалить запись Wiki для {game}?",
+                "wiki_reset_confirm_title": "Подтверждение сброса",
+                "wiki_reset_confirm_message": "Вы уверены, что хотите сбросить все Wiki-адреса к значениям по умолчанию?",
+                "wiki_reset_success": "Wiki-адреса сброшены к значениям по умолчанию",
+                "wiki_reset_failed": "Не удалось сбросить Wiki-адреса",
+                "wiki_save_failed": "Не удалось сохранить изменения Wiki-адресов",
+
+                # Tray icon
+                "tray_settings": "Настройки",
+                "tray_exit": "Выход",
+                "tray_tooltip": "GameWiki Assistant",
+                "tray_show_overlay": "Показать оверлей",
+                "tray_hide_overlay": "Скрыть оверлей",
+
+                # Right-click menu options
+                "menu_hide_overlay": "Скрыть оверлей",
+                "menu_minimize_to_mini": "Свернуть в мини-окно",
+                "menu_hide_to_tray": "Свернуть в трей",
+
+                # Notifications
+                "hotkey_registered": "Запущено, нажмите {hotkey} для вызова ассистента",
+                "hotkey_failed": "Запущено, но регистрация горячей клавиши не удалась. Настройте клавишу в параметрах или запустите от имени администратора.",
+                "settings_applied": "Настройки применены",
+                "hotkey_updated": "Горячая клавиша обновлена на {hotkey}",
+
+                # Validation messages
+                "validation_modifier_required": "Выберите хотя бы одну клавишу-модификатор",
+                "validation_api_key_required": "Введите Gemini API Key или задайте переменную окружения GEMINI_API_KEY",
+                "validation_settings_saved": "Настройки сохранены и применены",
+                "validation_setup_incomplete": "Настройка не завершена",
+                "validation_api_key_needed": "Для работы программы необходим Gemini API-ключ.\n\n"
+                                           "Настройте API-ключ в окне настроек или задайте переменную окружения GEMINI_API_KEY.",
+
+                # Welcome message
+                "welcome_title": "🎮 Добро пожаловать в GameWiki Assistant!",
+                "welcome_features": "💡 **Возможности:**",
+                "welcome_wiki_search": "• **Поиск по Wiki** — быстрый доступ к игровым Wiki-ресурсам",
+                "welcome_ai_guide": "• **AI-гайд БЕТА** — интеллектуальные ответы по играм (требуется API-ключ; поддерживаются: Helldivers 2 / Elden Ring / Don't Starve Together / Civilization VI)",
+                "welcome_examples": "🎯 **Примеры запросов для AI-гайда:**",
+                "welcome_helldivers": "• Helldivers 2: `лучший варбонд для новичка` / `сборка для низкого уровня`",
+                "welcome_eldenring": "• Elden Ring: `стратегии против боссов` / `рекомендации по снаряжению`",
+                "welcome_dst": "• Don't Starve Together: `что делать в первый день` / `выбор персонажа`",
+                "welcome_usage": "📝 **Советы по использованию:**",
+                "welcome_usage_desc": "Просто введите ваш вопрос — система автоматически определит, использовать поиск по Wiki или AI-гайд.",
+
+                # Common
+                "ok": "ОК",
+                "yes": "Да",
+                "no": "Нет",
+                "warning": "Предупреждение",
+                "error": "Ошибка",
+                "info": "Информация",
+                "success": "Успешно",
+
+                # Video sources
+                "video_sources_label": "Источники:",
+
+                # RAG System Status Messages
+                "rag_initializing": "🚀 Система игровых гайдов инициализируется, подождите...",
+                "rag_init_complete": "✅ Инициализация RAG-движка завершена",
+                "rag_init_failed": "❌ Ошибка инициализации RAG-движка",
+                "rag_error_occurred": "Ошибка системы игровых гайдов",
+                "rag_vector_store_error": "Векторное хранилище недоступно",
+                "rag_bm25_error": "Функция поиска BM25 недоступна",
+
+                # BM25 Index Error Messages
+                "bm25_load_failed": "Не удалось загрузить улучшенный BM25-индекс: {error}",
+                "bm25_index_missing": "Каталог BM25-индекса не найден, перестроение невозможно: {path}",
+                "bm25_package_unavailable": "Ошибка загрузки BM25-индекса: пакет bm25s недоступен — {error}",
+                "bm25_save_failed": "Не удалось сохранить упрощённый BM25-индекс: {error}",
+                "bm25_stats_failed": "Не удалось получить статистику BM25: пакет bm25s недоступен",
+                "bm25_search_failed": "Ошибка поиска BM25: пакет bm25s недоступен",
+                "bm25_build_failed": "Ошибка построения BM25-индекса: пакет bm25s недоступен",
+                "bm25_build_error": "Ошибка построения улучшенного BM25-индекса: {error}",
+                "bm25_search_not_initialized": "Ошибка поиска BM25: индекс не инициализирован, сначала вызовите метод build_index()",
+                "bm25_save_not_available": "Не удалось сохранить BM25-индекс: пакет bm25s недоступен",
+                "bm25_search_execution_failed": "Ошибка выполнения поиска BM25: {error}",
+                "enhanced_bm25_load_failed": "Ошибка загрузки улучшенного BM25-индекса: {error}",
+                "bm25_index_build_failed": "Ошибка построения BM25-индекса: {error}",
+                "enhanced_bm25_index_build_failed": "Ошибка построения улучшенного BM25-индекса: {error}",
+
+                # Status Messages (for chat transitions)
+                "status_query_received": "🔍 Анализирую ваш вопрос...",
+                "status_db_searching": "📚 Поиск по базе знаний...",
+                "status_ai_summarizing": "📝 Генерация интеллектуального ответа...",
+                "status_completed": "✨ Ответ сформирован",
+                "status_wiki_searching": "Поиск Wiki-страницы...",
+                "status_wiki_found": "Найдена Wiki-страница:",
+                "status_guide_searching": "Поиск информации...",
+                "status_guide_generating": "Генерация гайда...",
+                "status_error_not_found": "К сожалению, релевантная информация не найдена",
+                "status_error_timeout": "Превышено время ожидания, попробуйте позже",
+
+                # Search mode menu
+                "search_mode_auto": "Автопоиск",
+                "search_mode_wiki": "Поиск по Wiki",
+                "search_mode_ai": "AI-поиск",
+                "search_mode_url": "Перейти по URL",
+
+                # Game Task Flow Buttons and Content
+                "dst_task_button": "📋 DST: план задач",
+                "helldiver2_task_button": "📋 Helldivers 2: гайд",
+                "eldenring_task_button": "📋 Elden Ring: гайд",
+                "dst_task_flow_title": "DST — план задач",
+                "dst_survival_guide_title": "Don't Starve Together — руководство по выживанию",
+                "dst_technical_error": "Не удалось отобразить полную страницу плана задач из-за технической ошибки.",
+                "dst_recommended_resources": "Рекомендуемые ресурсы:",
+                "dst_official_wiki": "Официальная Wiki Don't Starve",
+                "civ6_task_button": "📋 Civilization VI: гайд",
+                "dst_basic_survival": "Базовое выживание: соберите ветки и кремень для инструментов",
+                "dst_food_gathering": "Добыча еды: собирайте ягоды и морковь",
+                "dst_base_building": "Строительство базы: выберите хорошее место для костра",
+                "dst_winter_preparation": "Подготовка к зиме: запасите еду и топливо",
+
+                # Game detection messages
+                "game_not_detected": "Игра не обнаружена. Нажмите горячую клавишу в игре или добавьте игру в настройках Wiki, если её нет в списке.",
+                "game_not_supported": "Текущее окно '{window}' не является поддерживаемой игрой. Переключитесь на поддерживаемую игру или добавьте её в настройках.",
+
+                # Wiki-просмотр
+                "btn_back_to_chat": "< Назад к чату",
+                "tooltip_nav_back": "Назад на предыдущую страницу",
+                "tooltip_nav_forward": "Вперёд на следующую страницу",
+                "tooltip_refresh": "Обновить страницу",
+                "placeholder_url_bar": "Введите URL и нажмите Enter...",
+                "btn_open_browser": "Открыть в браузере",
+                "tooltip_close_window": "Закрыть окно",
+                "label_loading": "Загрузка...",
+
+                # Главное окно
+                "placeholder_search": "поиск информации...",
+                "tooltip_history": "История",
+                "tooltip_quick_access": "Перейти на внешний сайт",
+                "tooltip_search_mode": "Режим поиска",
+                "tooltip_voice_input": "Голосовой ввод",
+                "tooltip_voice_unavailable": "Голосовой ввод недоступен. Установите vosk и sounddevice.",
+                "tooltip_settings": "Настройки",
+                "placeholder_enter_url": "Введите URL...",
+                "placeholder_search_query": "Введите поисковый запрос...",
+                "placeholder_enter_question": "Введите вопрос...",
+                "placeholder_enter_message": "Введите сообщение...",
+                "placeholder_listening": "Слушаю...",
+                "placeholder_stop_generation": "Нажмите Стоп для отмены генерации...",
+                "btn_open": "Открыть",
+                "clear_history": "Очистить историю",
+                "tooltip_history_cleared": "История очищена",
+                "tooltip_view_history": "Просмотр истории",
+                "history_more": "... и ещё {count}",
+
+                # Диалог API-ключей
+                "dialog_ai_unavailable_title": "AI-функции недоступны",
+                "dialog_ai_unavailable_msg": "Для работы AI-гайдов необходимы API-ключи:\n\nОтсутствуют: {keys}\n\n⚠️ Примечание: только Gemini API не обеспечивает полноценную RAG-функциональность.\nВекторный поиск Jina необходим для полной работы AI-гайдов.\n\nВы по-прежнему можете использовать поиск по Wiki без API-ключей.",
+                "btn_configure_api_keys": "Настроить API-ключи",
+                "btn_maybe_later": "Позже",
+                "checkbox_dont_remind": "Больше не напоминать (только поиск по Wiki)",
+
+                # Настройки — дополнительно
+                "tab_general_settings": "Общие настройки",
+                "tab_quick_access": "Быстрый доступ",
+                "shortcuts_title": "Управление сайтами быстрого доступа",
+                "shortcuts_info": "Добавляйте или удаляйте кнопки быстрого доступа к любимым сайтам.\nКнопки будут отображаться над полем ввода.",
+                "btn_add_website": "Добавить сайт",
+                "btn_edit_selected": "Редактировать",
+                "btn_hide_show_selected": "Скрыть/Показать",
+                "btn_remove_selected": "Удалить",
+                "btn_add": "Добавить",
+                "btn_edit": "Изменить",
+                "btn_remove": "Удалить",
+                "label_system_default": "Системное по умолчанию",
+                "label_audio_unavailable": "Аудиоустройства недоступны (ошибка импорта)",
+                "btn_unavailable": "Недоступно",
+                "btn_refresh_failed": "Ошибка обновления",
+                "checkbox_auto_voice_hotkey": "Авт. голосовой ввод при горячей клавише",
+                "tooltip_auto_voice_hotkey": "Голосовой ввод запускается автоматически при открытии окна горячей клавишей",
+                "checkbox_auto_send_voice": "Авт. отправка при остановке записи",
+                "tooltip_auto_send_voice": "Голосовой ввод автоматически отправляется при остановке записи",
+
+                # Китайская голосовая модель
+                "label_chinese_model_not_installed": "Китайская голосовая модель не установлена",
+                "btn_download_chinese_model_140mb": "Скачать китайскую голосовую модель (~140 МБ)",
+                "label_chinese_model_info": "Необходима для китайского голосового ввода. Скачивается один раз.",
+                "label_downloading_chinese_model": "Загрузка китайской голосовой модели...",
+                "label_chinese_model_installed": "Китайская голосовая модель установлена",
+                "btn_redownload_chinese_model": "Перескачать китайскую модель",
+                "btn_download_chinese_model_42mb": "Скачать китайскую голосовую модель (~42 МБ)",
+                "label_chinese_model_download_success": "Китайская голосовая модель успешно установлена",
+                "label_chinese_model_download_failed": "Не удалось скачать китайскую голосовую модель",
+                "label_voice_not_available": "Распознавание речи недоступно. Установите vosk.",
+
+                # Экран загрузки
+                "splash_starting": "Запуск...",
+                "splash_loading_core": "Загрузка основных модулей...",
+                "splash_loading_ui": "Загрузка компонентов интерфейса...",
+                "splash_loading_settings": "Загрузка настроек...",
+                "splash_loading_ai": "Загрузка AI-модулей...",
+                "splash_loading_text": "Инициализация обработки текста...",
+                "splash_loading_games": "Загрузка базы игр...",
+                "splash_almost_ready": "Почти готово...",
+                "splash_starting_app": "Запуск приложения..."
             }
         else:
             # 对于其他语言，返回英语翻译作为基础

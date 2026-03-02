@@ -9,6 +9,8 @@ from PyQt6.QtCore import Qt, QTimer, pyqtSignal, QThread
 from PyQt6.QtGui import QPixmap, QFont
 from pathlib import Path
 
+from src.game_wiki_tooltip.core.i18n import t
+
 
 class InitializationThread(QThread):
     """Thread for application initialization"""
@@ -22,22 +24,22 @@ class InitializationThread(QThread):
         
         try:
             # Step 1: Import core modules
-            self.progress_update.emit(10, "Loading core modules...")
+            self.progress_update.emit(10, t("splash_loading_core"))
             from src.game_wiki_tooltip.core import config
             from src.game_wiki_tooltip.core import utils
 
             # Step 2: Import Qt modules
-            self.progress_update.emit(25, "Loading UI components...")
+            self.progress_update.emit(25, t("splash_loading_ui"))
             from . import qt_app
             from src.game_wiki_tooltip.window_component import unified_window
 
             # Step 3: Initialize settings
-            self.progress_update.emit(40, "Loading settings...")
+            self.progress_update.emit(40, t("splash_loading_settings"))
             from src.game_wiki_tooltip.core.config import SettingsManager
             settings_manager = SettingsManager()
             
             # Step 4: Load AI modules directly (not just start background loading)
-            self.progress_update.emit(55, "Loading AI modules...")
+            self.progress_update.emit(55, t("splash_loading_ai"))
             try:
                 # Import and initialize AI modules during splash screen
                 from .ai.unified_query_processor import process_query_unified
@@ -63,7 +65,7 @@ class InitializationThread(QThread):
                     pass
             
             # Step 5: Initialize jieba and load vector mappings
-            self.progress_update.emit(70, "Initializing text processing...")
+            self.progress_update.emit(70, t("splash_loading_text"))
             try:
                 # Initialize jieba to avoid delay on first use
                 import jieba
@@ -73,7 +75,7 @@ class InitializationThread(QThread):
                 logger.warning(f"Failed to initialize jieba: {e}")
             
             # Step 6: Load game mappings
-            self.progress_update.emit(80, "Loading game database...")
+            self.progress_update.emit(80, t("splash_loading_games"))
             try:
                 # Force load vector mappings early
                 from .ai.rag_query import load_vector_mappings
@@ -82,12 +84,12 @@ class InitializationThread(QThread):
                 pass
             
             # Step 7: Final initialization
-            self.progress_update.emit(90, "Almost ready...")
+            self.progress_update.emit(90, t("splash_almost_ready"))
 
             import time
             time.sleep(0.2)  # Brief pause for visual effect
             
-            self.progress_update.emit(100, "Starting application...")
+            self.progress_update.emit(100, t("splash_starting_app"))
             self.initialization_complete.emit()
             
         except Exception as e:
@@ -188,7 +190,7 @@ class SplashScreen(QWidget):
         bg_layout.addWidget(self.progress_bar)
         
         # Status label
-        self.status_label = QLabel("Starting...")
+        self.status_label = QLabel(t("splash_starting"))
         self.status_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.status_label.setStyleSheet("color: #cccccc; font-size: 11px;")
         bg_layout.addWidget(self.status_label)

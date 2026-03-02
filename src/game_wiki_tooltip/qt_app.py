@@ -82,18 +82,12 @@ class ApiKeyMissingDialog(QDialog):
         layout.setSpacing(15)
         
         # Title
-        title_label = QLabel("AI Features Unavailable")
+        title_label = QLabel(t("dialog_ai_unavailable_title"))
         title_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #d32f2f;")
         layout.addWidget(title_label)
-        
+
         # Message content
-        message = (
-            "AI guide features require both API keys to function properly:\n\n"
-            f"Missing: {', '.join(self.missing_keys)}\n\n"
-            "⚠️ Note: Gemini API alone cannot provide high-quality RAG functionality.\n"
-            "Jina vector search is essential for complete AI guide features.\n\n"
-            "You can still use Wiki search without API keys."
-        )
+        message = t("dialog_ai_unavailable_msg", keys=', '.join(self.missing_keys))
         
         message_label = QLabel(message)
         message_label.setWordWrap(True)
@@ -101,7 +95,7 @@ class ApiKeyMissingDialog(QDialog):
         layout.addWidget(message_label)
         
         # "Don't remind me again" checkbox
-        self.dont_remind_checkbox = QCheckBox("Don't remind me again (Wiki search only)")
+        self.dont_remind_checkbox = QCheckBox(t("checkbox_dont_remind"))
         self.dont_remind_checkbox.setStyleSheet("font-size: 11px;")
         layout.addWidget(self.dont_remind_checkbox)
         
@@ -110,7 +104,7 @@ class ApiKeyMissingDialog(QDialog):
         button_layout.setSpacing(10)
         
         # Configure button
-        config_button = QPushButton("Configure API Keys")
+        config_button = QPushButton(t("btn_configure_api_keys"))
         config_button.setStyleSheet("""
             QPushButton {
                 background-color: #1976d2;
@@ -128,7 +122,7 @@ class ApiKeyMissingDialog(QDialog):
         button_layout.addWidget(config_button)
         
         # Later button
-        later_button = QPushButton("Maybe Later")
+        later_button = QPushButton(t("btn_maybe_later"))
         later_button.setStyleSheet("""
             QPushButton {
                 background-color: #757575;

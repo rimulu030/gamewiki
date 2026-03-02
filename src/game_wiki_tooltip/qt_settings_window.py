@@ -62,17 +62,12 @@ class ApiKeyMissingDialog(QDialog):
         layout.setSpacing(15)
         
         # Title
-        title_label = QLabel("AI Features Unavailable")
+        title_label = QLabel(t("dialog_ai_unavailable_title"))
         title_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #d32f2f;")
         layout.addWidget(title_label)
-        
+
         # Message content
-        message = (
-            "AI guide features require both API keys to function properly:\n\n"
-            f"Missing: {', '.join(self.missing_keys)}\n\n"
-            "⚠️ Note: Missing Gemini API cannot provide AI RAG functionality.\n"
-            "You can still use Wiki search without API keys."
-        )
+        message = t("dialog_ai_unavailable_msg", keys=', '.join(self.missing_keys))
         
         message_label = QLabel(message)
         message_label.setWordWrap(True)
@@ -80,16 +75,16 @@ class ApiKeyMissingDialog(QDialog):
         layout.addWidget(message_label)
         
         # "Don't remind me again" checkbox
-        self.dont_remind_checkbox = QCheckBox("Don't remind me again (Wiki search only)")
+        self.dont_remind_checkbox = QCheckBox(t("checkbox_dont_remind"))
         self.dont_remind_checkbox.setStyleSheet("font-size: 11px;")
         layout.addWidget(self.dont_remind_checkbox)
-        
+
         # Button layout
         button_layout = QHBoxLayout()
         button_layout.setSpacing(10)
-        
+
         # Configure button
-        config_button = QPushButton("Configure API Keys")
+        config_button = QPushButton(t("btn_configure_api_keys"))
         config_button.setStyleSheet("""
             QPushButton {
                 background-color: #1976d2;
@@ -107,7 +102,7 @@ class ApiKeyMissingDialog(QDialog):
         button_layout.addWidget(config_button)
         
         # Later button
-        later_button = QPushButton("Maybe Later")
+        later_button = QPushButton(t("btn_maybe_later"))
         later_button.setStyleSheet("""
             QPushButton {
                 background-color: #757575;
@@ -254,14 +249,14 @@ class QtSettingsWindow(QMainWindow):
         layout.setContentsMargins(0, 10, 0, 0)
         
         # Model status label
-        self.chinese_model_status = QLabel("Chinese voice model not installed")
+        self.chinese_model_status = QLabel(t("label_chinese_model_not_installed"))
         self.chinese_model_status.setStyleSheet("color: #ff6b6b; font-weight: bold;")
         layout.addWidget(self.chinese_model_status)
         
         # Download button and progress
         download_layout = QHBoxLayout()
         
-        self.download_chinese_btn = QPushButton("Download Chinese Voice Model (~140MB)")
+        self.download_chinese_btn = QPushButton(t("btn_download_chinese_model_140mb"))
         self.download_chinese_btn.clicked.connect(self._download_chinese_model)
         download_layout.addWidget(self.download_chinese_btn)
         
@@ -273,7 +268,7 @@ class QtSettingsWindow(QMainWindow):
         layout.addLayout(download_layout)
         
         # Info label
-        info_label = QLabel("Required for Chinese voice input. Download once and use offline.")
+        info_label = QLabel(t("label_chinese_model_info"))
         info_label.setStyleSheet("color: #666; font-size: 11px;")
         info_label.setWordWrap(True)
         layout.addWidget(info_label)
@@ -287,13 +282,13 @@ class QtSettingsWindow(QMainWindow):
             
             manager = VoskModelManager()
             if not manager:
-                QMessageBox.warning(self, "Error", "Voice recognition not available. Please install vosk.")
+                QMessageBox.warning(self, t("error"), t("label_voice_not_available"))
                 return
             
             # Disable button and show progress
             self.download_chinese_btn.setEnabled(False)
             self.download_progress.setVisible(True)
-            self.chinese_model_status.setText("Downloading Chinese voice model...")
+            self.chinese_model_status.setText(t("label_downloading_chinese_model"))
             self.chinese_model_status.setStyleSheet("color: #1971c2;")
             
             # Create download thread
@@ -310,9 +305,9 @@ class QtSettingsWindow(QMainWindow):
                     
                     success = manager.download_model('chinese', progress_callback)
                     if success:
-                        self.finished.emit(True, "Chinese voice model installed successfully")
+                        self.finished.emit(True, t("label_chinese_model_download_success"))
                     else:
-                        self.finished.emit(False, "Failed to download Chinese voice model")
+                        self.finished.emit(False, t("label_chinese_model_download_failed"))
             
             self.download_thread = DownloadThread()
             self.download_thread.progress.connect(self._update_download_progress)
@@ -321,7 +316,7 @@ class QtSettingsWindow(QMainWindow):
             
         except Exception as e:
             logger.error(f"Failed to start Chinese model download: {e}")
-            QMessageBox.critical(self, "Error", f"Failed to download: {str(e)}")
+            QMessageBox.critical(self, t("error"), f"Failed to download: {str(e)}")
             self.download_chinese_btn.setEnabled(True)
             self.download_progress.setVisible(False)
     
@@ -336,14 +331,14 @@ class QtSettingsWindow(QMainWindow):
         self.download_chinese_btn.setEnabled(True)
         
         if success:
-            self.chinese_model_status.setText("Chinese voice model installed")
+            self.chinese_model_status.setText(t("label_chinese_model_installed"))
             self.chinese_model_status.setStyleSheet("color: #2f9e44; font-weight: bold;")
-            self.download_chinese_btn.setText("Re-download Chinese Model")
-            QMessageBox.information(self, "Success", message)
+            self.download_chinese_btn.setText(t("btn_redownload_chinese_model"))
+            QMessageBox.information(self, t("success"), message)
         else:
-            self.chinese_model_status.setText("Chinese voice model not installed")
+            self.chinese_model_status.setText(t("label_chinese_model_not_installed"))
             self.chinese_model_status.setStyleSheet("color: #ff6b6b; font-weight: bold;")
-            QMessageBox.warning(self, "Error", message)
+            QMessageBox.warning(self, t("error"), message)
     
     def _check_chinese_model_status(self):
         """Check if Chinese model is installed"""
@@ -352,13 +347,13 @@ class QtSettingsWindow(QMainWindow):
             
             manager = VoskModelManager()
             if manager.is_model_available('chinese'):
-                self.chinese_model_status.setText("Chinese voice model installed")
+                self.chinese_model_status.setText(t("label_chinese_model_installed"))
                 self.chinese_model_status.setStyleSheet("color: #2f9e44; font-weight: bold;")
-                self.download_chinese_btn.setText("Re-download Chinese Model")
+                self.download_chinese_btn.setText(t("btn_redownload_chinese_model"))
             else:
-                self.chinese_model_status.setText("Chinese voice model not installed")
+                self.chinese_model_status.setText(t("label_chinese_model_not_installed"))
                 self.chinese_model_status.setStyleSheet("color: #ff6b6b; font-weight: bold;")
-                self.download_chinese_btn.setText("Download Chinese Voice Model (~42MB)")
+                self.download_chinese_btn.setText(t("btn_download_chinese_model_42mb"))
         except Exception as e:
             logger.error(f"Failed to check Chinese model status: {e}")
     
@@ -374,12 +369,12 @@ class QtSettingsWindow(QMainWindow):
             self.audio_device_combo.clear()
             
             # Add default option
-            self.audio_device_combo.addItem("System Default", None)
+            self.audio_device_combo.addItem(t("label_system_default"), None)
             
             # Check if audio devices function is available
             if not AUDIO_DEVICES_AVAILABLE or get_audio_input_devices is None:
                 logger.warning("Audio device enumeration not available - module import failed")
-                self.audio_device_combo.addItem("Audio devices unavailable (import error)", None)
+                self.audio_device_combo.addItem(t("label_audio_unavailable"), None)
                 return
             
             logger.debug("Calling get_audio_input_devices...")
@@ -433,7 +428,7 @@ class QtSettingsWindow(QMainWindow):
             
             # Disable refresh button to prevent rapid clicking
             self.refresh_button.setEnabled(False)
-            self.refresh_button.setText("Refreshing...")
+            self.refresh_button.setText(t("refreshing_devices"))
             logger.debug("Button disabled, text changed to 'Refreshing...'")
             
             # Save current selection
@@ -449,7 +444,7 @@ class QtSettingsWindow(QMainWindow):
                         "Audio Unavailable",
                         "Audio device enumeration is not available.\nPlease check that sounddevice is installed."
                     )
-                    self.refresh_button.setText("Unavailable")
+                    self.refresh_button.setText(t("btn_unavailable"))
                     QTimer.singleShot(1500, lambda: self.refresh_button.setText(t("refresh_devices_button")))
                     return
                 
@@ -459,7 +454,7 @@ class QtSettingsWindow(QMainWindow):
                 logger.debug("Device refresh completed successfully")
                 
                 # Show success message
-                self.refresh_button.setText("Refreshed!")
+                self.refresh_button.setText(t("refresh_complete"))
                 QTimer.singleShot(1000, lambda: self.refresh_button.setText(t("refresh_devices_button")))
                 
                 # Try to restore previous selection
@@ -473,7 +468,7 @@ class QtSettingsWindow(QMainWindow):
             except Exception as e:
                 # Handle any errors during refresh
                 logger.error(f"Error during device refresh: {e}", exc_info=True)
-                self.refresh_button.setText("Refresh failed")
+                self.refresh_button.setText(t("btn_refresh_failed"))
                 QTimer.singleShot(1500, lambda: self.refresh_button.setText(t("refresh_devices_button")))
                 
                 # Show error dialog to user
@@ -521,13 +516,12 @@ class QtSettingsWindow(QMainWindow):
         layout.setSpacing(20)
         
         # Title
-        title_label = QLabel("Manage Quick Access Websites")
+        title_label = QLabel(t("shortcuts_title"))
         title_label.setFont(QFont("Arial", 12, QFont.Weight.Bold))
         layout.addWidget(title_label)
-        
+
         # Explanation
-        info_label = QLabel("Add or remove quick access buttons for your favorite websites.\n"
-                           "These buttons will appear above the input field for easy access.")
+        info_label = QLabel(t("shortcuts_info"))
         info_label.setWordWrap(True)
         info_label.setStyleSheet("color: #666;")
         layout.addWidget(info_label)
@@ -567,19 +561,19 @@ class QtSettingsWindow(QMainWindow):
         # Buttons for add/remove
         button_layout = QHBoxLayout()
         
-        self.add_shortcut_btn = QPushButton("Add Website")
+        self.add_shortcut_btn = QPushButton(t("btn_add_website"))
         self.add_shortcut_btn.clicked.connect(self._add_shortcut)
         button_layout.addWidget(self.add_shortcut_btn)
         
-        self.edit_shortcut_btn = QPushButton("Edit Selected")
+        self.edit_shortcut_btn = QPushButton(t("btn_edit_selected"))
         self.edit_shortcut_btn.clicked.connect(self._edit_shortcut)
         button_layout.addWidget(self.edit_shortcut_btn)
         
-        self.toggle_visibility_btn = QPushButton("Hide/Show Selected")
+        self.toggle_visibility_btn = QPushButton(t("btn_hide_show_selected"))
         self.toggle_visibility_btn.clicked.connect(self._toggle_visibility)
         button_layout.addWidget(self.toggle_visibility_btn)
         
-        self.remove_shortcut_btn = QPushButton("Remove Selected")
+        self.remove_shortcut_btn = QPushButton(t("btn_remove_selected"))
         self.remove_shortcut_btn.clicked.connect(self._remove_shortcut)
         button_layout.addWidget(self.remove_shortcut_btn)
         
@@ -588,7 +582,7 @@ class QtSettingsWindow(QMainWindow):
         layout.addLayout(button_layout)
         layout.addStretch()
         
-        self.tab_widget.addTab(tab, "Quick Access")
+        self.tab_widget.addTab(tab, t("tab_quick_access"))
     
     def _load_shortcuts_list(self):
         """Load shortcuts into the list widget"""
@@ -858,16 +852,16 @@ class QtSettingsWindow(QMainWindow):
         
         # Auto voice on hotkey checkbox
         auto_voice_layout = QHBoxLayout()
-        self.auto_voice_checkbox = QCheckBox(t("auto_voice_on_hotkey") if hasattr(self, 't') else "Auto-start voice input on hotkey")
-        self.auto_voice_checkbox.setToolTip("When enabled, voice input will automatically start when opening the window with hotkey")
+        self.auto_voice_checkbox = QCheckBox(t("checkbox_auto_voice_hotkey"))
+        self.auto_voice_checkbox.setToolTip(t("tooltip_auto_voice_hotkey"))
         auto_voice_layout.addWidget(self.auto_voice_checkbox)
         auto_voice_layout.addStretch()
         audio_group_layout.addLayout(auto_voice_layout)
         
         # Auto-send voice input checkbox
         auto_send_layout = QHBoxLayout()
-        self.auto_send_checkbox = QCheckBox("Auto-send voice input when recording stops")
-        self.auto_send_checkbox.setToolTip("When enabled, voice input will automatically be sent when you stop recording")
+        self.auto_send_checkbox = QCheckBox(t("checkbox_auto_send_voice"))
+        self.auto_send_checkbox.setToolTip(t("tooltip_auto_send_voice"))
         auto_send_layout.addWidget(self.auto_send_checkbox)
         auto_send_layout.addStretch()
         audio_group_layout.addLayout(auto_send_layout)
@@ -885,7 +879,7 @@ class QtSettingsWindow(QMainWindow):
         scroll_area.setWidget(content_widget)
         
         # Add scroll area to tab
-        self.tab_widget.addTab(scroll_area, "General Settings")
+        self.tab_widget.addTab(scroll_area, t("tab_general_settings"))
         
     def _create_wiki_tab(self):
         """Create wiki URL configuration tab"""
@@ -952,17 +946,17 @@ class QtSettingsWindow(QMainWindow):
         button_layout.setSpacing(8)  # Reduced button spacing
         
         # Add button
-        self.add_wiki_button = QPushButton("Add")
+        self.add_wiki_button = QPushButton(t("btn_add"))
         self.add_wiki_button.clicked.connect(self._add_wiki_entry)
         button_layout.addWidget(self.add_wiki_button)
         
         # Edit button
-        self.edit_wiki_button = QPushButton("Edit")
+        self.edit_wiki_button = QPushButton(t("btn_edit"))
         self.edit_wiki_button.clicked.connect(self._edit_wiki_url)
         button_layout.addWidget(self.edit_wiki_button)
         
         # Remove button
-        self.remove_wiki_button = QPushButton("Remove")
+        self.remove_wiki_button = QPushButton(t("btn_remove"))
         self.remove_wiki_button.clicked.connect(self._remove_wiki_entry)
         button_layout.addWidget(self.remove_wiki_button)
         
@@ -1074,8 +1068,8 @@ class QtSettingsWindow(QMainWindow):
         self.setWindowTitle(t("settings_title"))
         
         # Tab titles
-        self.tab_widget.setTabText(0, "General Settings")  # General Settings tab
-        self.tab_widget.setTabText(1, "Quick Access")  # Shortcuts tab
+        self.tab_widget.setTabText(0, t("tab_general_settings"))  # General Settings tab
+        self.tab_widget.setTabText(1, t("tab_quick_access"))  # Shortcuts tab
         self.tab_widget.setTabText(2, t("wiki_tab"))
         self.tab_widget.setTabText(3, t("api_tab"))
         
