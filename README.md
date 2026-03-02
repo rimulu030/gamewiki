@@ -6,9 +6,8 @@
 ![Python](https://img.shields.io/badge/Python-3.8%2B-green?logo=python)
 ![Games](https://img.shields.io/badge/AI%20Games-4%20Supported-orange?logo=gamepad)
 ![License](https://img.shields.io/badge/License-GPL3.0-yellow)
-[![GitHub Release](https://img.shields.io/github/v/release/rimulu030/gamewiki?include_prereleases)](https://github.com/rimulu030/gamewiki/releases/download/v1.1.0/GameWikiAssistant.zip)
 
-👉 **[中文说明](README.zh-CN.md)** | **[Quick Start](#-quick-install)** | **[Download Latest Release](https://github.com/rimulu030/gamewiki/releases/download/v1.1.0/GameWikiAssistant.zip)** |  **[Join Our Discord](https://discord.gg/5HHjNdmYtm)**
+👉 **[中文说明](README.zh-CN.md)** | **[Quick Start](#-quick-install)**  |  **[Join Our Discord](https://discord.gg/5HHjNdmYtm)**
 
 ## ✨ Why GameWiki?
 
@@ -39,15 +38,7 @@ _"The **Gemini API** "free tier" is offered through the API service with lower [
 
 ## 🚀 Quick Install
 
-### Option 1: Download Ready-to-Use Package (Recommended)
-1. **[⬇️ Download Latest Release](https://github.com/rimulu030/gamewiki/releases/download/v1.1.0/GameWikiAssistant.zip)**
-2. Extract the ZIP file
-3. Run `GameWikiAssistant/GameWikiAssistant.exe`
-4. Set your hotkey and start gaming!
-
-💡 **Try AI Chat Features Without Games**: If you want to test the AI conversation feature but don't have any supported games installed, you can create a folder and rename it to any game with an existing knowledge base (like "Don't Starve Together" or "HELLDIVERS™ 2"). Then, focus on that folder and trigger the hotkey to access the AI assistant. Try ask question like "how can I catch a rabbit?"
-
-### Option 2: Run from Source
+### Run from Source
 ```bash
 # Clone and setup
 git clone https://github.com/rimulu030/gamewiki.git
