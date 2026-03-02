@@ -917,10 +917,14 @@ class QtSettingsWindow(QMainWindow):
         
         layout.addLayout(desc_search_layout)
         
-        # Wiki URL list widget with increased height
+        # List + buttons in a horizontal layout
+        list_buttons_layout = QHBoxLayout()
+        list_buttons_layout.setSpacing(8)
+
+        # Wiki URL list widget
         self.wiki_list = QListWidget()
-        self.wiki_list.setMinimumHeight(150)  # Increased height for better visibility
-        self.wiki_list.setSizePolicy(self.wiki_list.sizePolicy().horizontalPolicy(), 
+        self.wiki_list.setMinimumHeight(120)
+        self.wiki_list.setSizePolicy(self.wiki_list.sizePolicy().horizontalPolicy(),
                                    self.wiki_list.sizePolicy().Policy.Expanding)
         self.wiki_list.setStyleSheet("""
             QListWidget {
@@ -940,34 +944,32 @@ class QtSettingsWindow(QMainWindow):
                 color: #1976d2;
             }
         """)
-        layout.addWidget(self.wiki_list, 1)  # Give more weight to the list widget
-        
-        # Buttons layout - reduced spacing
-        button_layout = QHBoxLayout()
-        button_layout.setSpacing(8)  # Reduced button spacing
-        
-        # Add button
+        list_buttons_layout.addWidget(self.wiki_list, 1)
+
+        # Buttons column on the right
+        button_layout = QVBoxLayout()
+        button_layout.setSpacing(6)
+
         self.add_wiki_button = QPushButton(t("btn_add"))
         self.add_wiki_button.clicked.connect(self._add_wiki_entry)
         button_layout.addWidget(self.add_wiki_button)
-        
-        # Edit button
+
         self.edit_wiki_button = QPushButton(t("btn_edit"))
         self.edit_wiki_button.clicked.connect(self._edit_wiki_url)
         button_layout.addWidget(self.edit_wiki_button)
-        
-        # Remove button
+
         self.remove_wiki_button = QPushButton(t("btn_remove"))
         self.remove_wiki_button.clicked.connect(self._remove_wiki_entry)
         button_layout.addWidget(self.remove_wiki_button)
-        
-        # Reset button
+
+        button_layout.addStretch()
+
         self.reset_wiki_button = QPushButton(t("wiki_reset_button"))
         self.reset_wiki_button.clicked.connect(self._reset_wiki_urls)
         button_layout.addWidget(self.reset_wiki_button)
-        
-        button_layout.addStretch()
-        layout.addLayout(button_layout)
+
+        list_buttons_layout.addLayout(button_layout)
+        layout.addLayout(list_buttons_layout, 1)
         
         # Tips with bold warning - reduced spacing
         tips_html = t("wiki_tips_with_warning")
@@ -1110,6 +1112,12 @@ class QtSettingsWindow(QMainWindow):
         # Wiki tab - Update wiki-related UI elements
         if hasattr(self, 'wiki_search_input'):
             self.wiki_search_input.setPlaceholderText(t("wiki_search_placeholder"))
+        if hasattr(self, 'add_wiki_button'):
+            self.add_wiki_button.setText(t("btn_add"))
+        if hasattr(self, 'edit_wiki_button'):
+            self.edit_wiki_button.setText(t("btn_edit"))
+        if hasattr(self, 'remove_wiki_button'):
+            self.remove_wiki_button.setText(t("btn_remove"))
         if hasattr(self, 'reset_wiki_button'):
             self.reset_wiki_button.setText(t("wiki_reset_button"))
         
