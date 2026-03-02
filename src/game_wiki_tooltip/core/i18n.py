@@ -362,6 +362,8 @@ class TranslationManager:
             "tooltip_history_cleared": "History cleared",
             "tooltip_view_history": "View browsing history",
             "history_more": "... and {count} more",
+            "history_no_items": "No browsing history",
+            "history_recent_pages": "Recent Pages",
 
             # API key dialog
             "dialog_ai_unavailable_title": "AI Features Unavailable",
@@ -631,6 +633,8 @@ class TranslationManager:
                 "tooltip_history_cleared": "历史已清除",
                 "tooltip_view_history": "查看浏览历史",
                 "history_more": "... 还有 {count} 条",
+                "history_no_items": "没有浏览历史",
+                "history_recent_pages": "最近浏览",
 
                 # API密钥对话框
                 "dialog_ai_unavailable_title": "AI功能不可用",
@@ -896,6 +900,8 @@ class TranslationManager:
                 "tooltip_history_cleared": "История очищена",
                 "tooltip_view_history": "Просмотр истории",
                 "history_more": "... и ещё {count}",
+                "history_no_items": "История пуста",
+                "history_recent_pages": "Недавние страницы",
 
                 # Диалог API-ключей
                 "dialog_ai_unavailable_title": "AI-функции недоступны",

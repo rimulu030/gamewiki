@@ -140,6 +140,7 @@ class QtSettingsWindow(QMainWindow):
     
     # Signals
     settings_applied = pyqtSignal()
+    language_changed = pyqtSignal()
     
     def __init__(self, settings_manager: SettingsManager, parent=None):
         super().__init__(parent)
@@ -1055,6 +1056,9 @@ class QtSettingsWindow(QMainWindow):
             # Reload wiki URLs for the new language
             self._load_wiki_urls()
             
+            # Notify other windows about language change
+            self.language_changed.emit()
+
             # Show/hide Chinese model download section
             if selected_language == 'zh':
                 self.chinese_model_widget.show()

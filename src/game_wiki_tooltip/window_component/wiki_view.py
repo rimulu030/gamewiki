@@ -227,10 +227,10 @@ class WikiView(QWidget):
                 }
             """)
         placeholder_layout = QVBoxLayout(self.placeholder_widget)
-        placeholder_label = QLabel(t("label_loading"))
-        placeholder_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        placeholder_label.setStyleSheet("color: #666; font-size: 14px;")
-        placeholder_layout.addWidget(placeholder_label)
+        self.placeholder_label = QLabel(t("label_loading"))
+        self.placeholder_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.placeholder_label.setStyleSheet("color: #666; font-size: 14px;")
+        placeholder_layout.addWidget(self.placeholder_label)
 
         self.content_widget = self.placeholder_widget
 
@@ -963,3 +963,14 @@ class WikiView(QWidget):
 
         # Delay restore, ensure the page is fully displayed
         QTimer.singleShot(100, self.resume_page)
+
+    def retranslate_ui(self):
+        """Update all UI text after language change"""
+        self.back_button.setText(t("btn_back_to_chat"))
+        self.nav_back_button.setToolTip(t("tooltip_nav_back"))
+        self.nav_forward_button.setToolTip(t("tooltip_nav_forward"))
+        self.refresh_button.setToolTip(t("tooltip_refresh"))
+        self.url_bar.setPlaceholderText(t("placeholder_url_bar"))
+        self.open_browser_button.setText(t("btn_open_browser"))
+        self.close_button.setToolTip(t("tooltip_close_window"))
+        self.placeholder_label.setText(t("label_loading"))

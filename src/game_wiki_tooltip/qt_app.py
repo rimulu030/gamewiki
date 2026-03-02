@@ -592,6 +592,7 @@ class GameWikiApp(QObject):
         if self.settings_window is None:
             self.settings_window = QtSettingsWindow(self.settings_mgr)
             self.settings_window.settings_applied.connect(self._on_settings_applied)
+            self.settings_window.language_changed.connect(self._on_language_changed)
             
             # 移除initial_setup处理逻辑，因为现在不会因为没有API key而强制退出
         
@@ -607,6 +608,15 @@ class GameWikiApp(QObject):
         if self.settings_window.size().width() < 600 or self.settings_window.size().height() < 500:
             self.settings_window.resize(600, 500)
             
+    def _on_language_changed(self):
+        """Handle live language change from settings combo box"""
+        # Update tray icon
+        if self.tray_icon:
+            self.tray_icon.update_text()
+        # Update main window
+        if self.assistant_ctrl and hasattr(self.assistant_ctrl, 'main_window') and self.assistant_ctrl.main_window:
+            self.assistant_ctrl.main_window.retranslate_ui()
+
     def _on_settings_applied(self):
         """Handle settings applied"""
         try:
@@ -749,7 +759,11 @@ class GameWikiApp(QObject):
             # Update tray icon text
             if self.tray_icon:
                 self.tray_icon.update_text()
-            
+
+            # Update main window text
+            if self.assistant_ctrl and hasattr(self.assistant_ctrl, 'main_window') and self.assistant_ctrl.main_window:
+                self.assistant_ctrl.main_window.retranslate_ui()
+
             # Re-register hotkey
             if self.hotkey_mgr:
                 logger.info("Re-registering hotkey...")

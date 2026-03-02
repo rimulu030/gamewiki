@@ -1848,11 +1848,11 @@ class UnifiedAssistantWindow(QMainWindow):
         history_items = self.history_manager.get_history(limit=20)
         
         if not history_items:
-            no_history_action = history_menu.addAction("No browsing history")
+            no_history_action = history_menu.addAction(t("history_no_items"))
             no_history_action.setEnabled(False)
         else:
             # Add header
-            header_action = history_menu.addAction("Recent Pages")
+            header_action = history_menu.addAction(t("history_recent_pages"))
             header_action.setEnabled(False)
             header_font = header_action.font()
             header_font.setBold(True)
@@ -2427,10 +2427,48 @@ class UnifiedAssistantWindow(QMainWindow):
         except Exception as e:
             print(f"⚠️ Error sending stop signal: {e}")
     
+    def retranslate_ui(self):
+        """Update all UI text after language change"""
+        # Window and title bar
+        self.setWindowTitle("GameWiki Assistant")
+        self.title_label.setText("GameWiki Assistant")
+
+        # Input placeholder (depends on current mode)
+        self._update_placeholder_for_mode()
+
+        # Button tooltips
+        self.history_button.setToolTip(t("tooltip_history"))
+        self.quick_access_button.setToolTip(t("tooltip_quick_access"))
+        self.mode_button.setToolTip(t("tooltip_search_mode"))
+        self.settings_btn.setToolTip(t("tooltip_settings"))
+        self.task_flow_button.setToolTip(t("task_flow"))
+
+        # Voice button tooltip depends on availability
+        if not is_voice_recognition_available():
+            self.voice_button.setToolTip(t("tooltip_voice_unavailable"))
+        else:
+            self.voice_button.setToolTip(t("tooltip_voice_input"))
+
+        # WikiView
+        if hasattr(self, 'wiki_view') and self.wiki_view:
+            self.wiki_view.retranslate_ui()
+
+    def _update_placeholder_for_mode(self):
+        """Update input placeholder text based on current mode"""
+        mode = getattr(self, 'current_mode', 'auto')
+        if mode == "url":
+            self.input_field.setPlaceholderText(t("placeholder_enter_url"))
+        elif mode == "wiki":
+            self.input_field.setPlaceholderText(t("placeholder_search_query"))
+        elif mode == "ai":
+            self.input_field.setPlaceholderText(t("placeholder_enter_question"))
+        else:
+            self.input_field.setPlaceholderText(t("placeholder_enter_message"))
+
     def contextMenuEvent(self, event):
         """Handle right-click menu event"""
         menu = QMenu(self)
-        
+
         # Hide to tray
         hide_action = menu.addAction(t("menu_hide_to_tray"))
         hide_action.triggered.connect(self._on_hide_to_tray)
