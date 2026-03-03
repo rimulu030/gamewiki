@@ -5,6 +5,8 @@ Wiki view widget for displaying web content.
 import time
 import logging
 
+from src.game_wiki_tooltip.core.i18n import t
+
 logger = logging.getLogger(__name__)
 
 from PyQt6.QtCore import (
@@ -86,7 +88,7 @@ class WikiView(QWidget):
         toolbar_layout.setContentsMargins(10, 0, 10, 0)
 
         # Back to chat button
-        self.back_button = QPushButton("< Back to Chat")
+        self.back_button = QPushButton(t("btn_back_to_chat"))
         self.back_button.setStyleSheet("""
                 QPushButton {
                     background-color: transparent;
@@ -131,17 +133,17 @@ class WikiView(QWidget):
         # Browser navigation buttons
         self.nav_back_button = QPushButton("◀")
         self.nav_back_button.setStyleSheet(nav_button_style)
-        self.nav_back_button.setToolTip("Back to the previous page")
+        self.nav_back_button.setToolTip(t("tooltip_nav_back"))
         self.nav_back_button.setEnabled(False)
 
         self.nav_forward_button = QPushButton("▶")
         self.nav_forward_button.setStyleSheet(nav_button_style)
-        self.nav_forward_button.setToolTip("Forward to the next page")
+        self.nav_forward_button.setToolTip(t("tooltip_nav_forward"))
         self.nav_forward_button.setEnabled(False)
 
         self.refresh_button = QPushButton("🔄")
         self.refresh_button.setStyleSheet(nav_button_style)
-        self.refresh_button.setToolTip("Refresh page")
+        self.refresh_button.setToolTip(t("tooltip_refresh"))
 
         # URL bar
         self.url_bar = QLineEdit()
@@ -159,10 +161,10 @@ class WikiView(QWidget):
                     outline: none;
                 }
             """)
-        self.url_bar.setPlaceholderText("Enter URL and press Enter to navigate...")
+        self.url_bar.setPlaceholderText(t("placeholder_url_bar"))
 
         # Open in browser button
-        self.open_browser_button = QPushButton("Open in Browser")
+        self.open_browser_button = QPushButton(t("btn_open_browser"))
         self.open_browser_button.setStyleSheet("""
                 QPushButton {
                     background-color: #4096ff;
@@ -194,7 +196,7 @@ class WikiView(QWidget):
                 background-color: #c82333;
             }
         """)
-        self.close_button.setToolTip("Close window")
+        self.close_button.setToolTip(t("tooltip_close_window"))
         self.close_button.clicked.connect(self.close_requested.emit)
 
         # Add all widgets to toolbar
@@ -225,10 +227,10 @@ class WikiView(QWidget):
                 }
             """)
         placeholder_layout = QVBoxLayout(self.placeholder_widget)
-        placeholder_label = QLabel("Loading...")
-        placeholder_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        placeholder_label.setStyleSheet("color: #666; font-size: 14px;")
-        placeholder_layout.addWidget(placeholder_label)
+        self.placeholder_label = QLabel(t("label_loading"))
+        self.placeholder_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.placeholder_label.setStyleSheet("color: #666; font-size: 14px;")
+        placeholder_layout.addWidget(self.placeholder_label)
 
         self.content_widget = self.placeholder_widget
 
@@ -961,3 +963,14 @@ class WikiView(QWidget):
 
         # Delay restore, ensure the page is fully displayed
         QTimer.singleShot(100, self.resume_page)
+
+    def retranslate_ui(self):
+        """Update all UI text after language change"""
+        self.back_button.setText(t("btn_back_to_chat"))
+        self.nav_back_button.setToolTip(t("tooltip_nav_back"))
+        self.nav_forward_button.setToolTip(t("tooltip_nav_forward"))
+        self.refresh_button.setToolTip(t("tooltip_refresh"))
+        self.url_bar.setPlaceholderText(t("placeholder_url_bar"))
+        self.open_browser_button.setText(t("btn_open_browser"))
+        self.close_button.setToolTip(t("tooltip_close_window"))
+        self.placeholder_label.setText(t("label_loading"))

@@ -322,7 +322,7 @@ class UnifiedAssistantWindow(QMainWindow):
         self.input_field.setObjectName("searchInput")
         # Set placeholder text with recommended query examples
         placeholder_texts = [
-            "search for information...",
+            t("placeholder_search"),
         ]
         self.input_field.setPlaceholderText(" | ".join(placeholder_texts[:3]))  # Show first 3 examples
         self.input_field.returnPressed.connect(self.on_input_return_pressed)
@@ -344,7 +344,7 @@ class UnifiedAssistantWindow(QMainWindow):
         self.history_button = QPushButton()
         self.history_button.setObjectName("historyBtn")
         self.history_button.setFixedSize(32, 32)
-        self.history_button.setToolTip("History")
+        self.history_button.setToolTip(t("tooltip_history"))
         self.history_button.clicked.connect(self.show_history_menu)
         
         # Load history icon
@@ -359,7 +359,7 @@ class UnifiedAssistantWindow(QMainWindow):
         self.quick_access_button = QPushButton()
         self.quick_access_button.setObjectName("externalBtn")
         self.quick_access_button.setFixedSize(32, 32)
-        self.quick_access_button.setToolTip("Go to external website")
+        self.quick_access_button.setToolTip(t("tooltip_quick_access"))
         # Connect click handler
         self.quick_access_button.clicked.connect(self.on_quick_access_clicked)
         
@@ -373,7 +373,7 @@ class UnifiedAssistantWindow(QMainWindow):
         self.mode_button = QPushButton()
         self.mode_button.setObjectName("searchBtn")
         self.mode_button.setFixedSize(32, 32)
-        self.mode_button.setToolTip("Search Mode")
+        self.mode_button.setToolTip(t("tooltip_search_mode"))
         self.mode_button.clicked.connect(self.show_mode_menu)
         
         # Load search icon
@@ -386,7 +386,7 @@ class UnifiedAssistantWindow(QMainWindow):
         self.voice_button = QPushButton()
         self.voice_button.setObjectName("voiceBtn")
         self.voice_button.setFixedSize(32, 32)
-        self.voice_button.setToolTip("Voice Input")
+        self.voice_button.setToolTip(t("tooltip_voice_input"))
         self.voice_button.clicked.connect(self.toggle_voice_input)
         
         # Load microphone icon
@@ -398,7 +398,7 @@ class UnifiedAssistantWindow(QMainWindow):
         # Disable voice button if voice recognition not available
         if not is_voice_recognition_available():
             self.voice_button.setEnabled(False)
-            self.voice_button.setToolTip("Voice input not available. Install vosk and sounddevice.")
+            self.voice_button.setToolTip(t("tooltip_voice_unavailable"))
         
         # Send button
         self.send_button = QPushButton()
@@ -477,7 +477,7 @@ class UnifiedAssistantWindow(QMainWindow):
         self.settings_btn = QPushButton()
         self.settings_btn.setObjectName("settingsBtn")
         self.settings_btn.setFixedSize(30, 25)
-        self.settings_btn.setToolTip("Settings")
+        self.settings_btn.setToolTip(t("tooltip_settings"))
         self.settings_btn.clicked.connect(self.open_settings)
         
         # Load settings icon
@@ -1595,7 +1595,7 @@ class UnifiedAssistantWindow(QMainWindow):
 
         self.current_mode = mode
         if mode == "url":
-            self.input_field.setPlaceholderText("Enter URL...")
+            self.input_field.setPlaceholderText(t("placeholder_enter_url"))
             # Disconnect and reconnect send button
             try:
                 self.send_button.clicked.disconnect()
@@ -1603,7 +1603,7 @@ class UnifiedAssistantWindow(QMainWindow):
                 pass
             self.send_button.clicked.connect(self.on_open_url_clicked)
         elif mode == "wiki":
-            self.input_field.setPlaceholderText("Enter search query...")
+            self.input_field.setPlaceholderText(t("placeholder_search_query"))
             # Disconnect and reconnect send button
             try:
                 self.send_button.clicked.disconnect()
@@ -1611,7 +1611,7 @@ class UnifiedAssistantWindow(QMainWindow):
                 pass
             self.send_button.clicked.connect(self.on_send_clicked)
         elif mode == "ai":
-            self.input_field.setPlaceholderText("Enter question...")
+            self.input_field.setPlaceholderText(t("placeholder_enter_question"))
             # Disconnect and reconnect send button
             try:
                 self.send_button.clicked.disconnect()
@@ -1619,7 +1619,7 @@ class UnifiedAssistantWindow(QMainWindow):
                 pass
             self.send_button.clicked.connect(self.on_send_clicked)
         else:  # auto mode
-            self.input_field.setPlaceholderText("Enter message...")
+            self.input_field.setPlaceholderText(t("placeholder_enter_message"))
             # Disconnect and reconnect send button
             try:
                 self.send_button.clicked.disconnect()
@@ -1848,11 +1848,11 @@ class UnifiedAssistantWindow(QMainWindow):
         history_items = self.history_manager.get_history(limit=20)
         
         if not history_items:
-            no_history_action = history_menu.addAction("No browsing history")
+            no_history_action = history_menu.addAction(t("history_no_items"))
             no_history_action.setEnabled(False)
         else:
             # Add header
-            header_action = history_menu.addAction("Recent Pages")
+            header_action = history_menu.addAction(t("history_recent_pages"))
             header_action.setEnabled(False)
             header_font = header_action.font()
             header_font.setBold(True)
@@ -1883,12 +1883,12 @@ class UnifiedAssistantWindow(QMainWindow):
             
             if len(history_items) > 10:
                 history_menu.addSeparator()
-                more_action = history_menu.addAction(f"... and {len(history_items) - 10} more")
+                more_action = history_menu.addAction(t("history_more", count=len(history_items) - 10))
                 more_action.setEnabled(False)
             
             # Add clear history option
             history_menu.addSeparator()
-            clear_action = history_menu.addAction("Clear History")
+            clear_action = history_menu.addAction(t("clear_history"))
             clear_action.triggered.connect(self.clear_history)
         
         # Show menu with intelligent positioning
@@ -1899,8 +1899,8 @@ class UnifiedAssistantWindow(QMainWindow):
         self._ensure_history_manager()
         self.history_manager.clear_history()
         # Show notification
-        QTimer.singleShot(100, lambda: self.history_button.setToolTip("History cleared"))
-        QTimer.singleShot(2000, lambda: self.history_button.setToolTip("View browsing history"))
+        QTimer.singleShot(100, lambda: self.history_button.setToolTip(t("tooltip_history_cleared")))
+        QTimer.singleShot(2000, lambda: self.history_button.setToolTip(t("tooltip_view_history")))
 
     def _show_task_flow_html(self, game_name):
         """Show task flow HTML for a specific game"""
@@ -2182,7 +2182,7 @@ class UnifiedAssistantWindow(QMainWindow):
         
         # Store original placeholder
         self.original_placeholder = self.input_field.placeholderText()
-        self.input_field.setPlaceholderText("Listening...")
+        self.input_field.setPlaceholderText(t("placeholder_listening"))
         
         # Create and start voice thread with configured audio device
         device_index = self.settings_manager.settings.audio_device_index
@@ -2363,18 +2363,18 @@ class UnifiedAssistantWindow(QMainWindow):
             pause_icon = load_svg_icon(pause_icon_path, color="#ffffff", size=20)
             self.send_button.setIcon(pause_icon)
             self.send_button.setProperty("stop_mode", "true")
-            self.input_field.setPlaceholderText("Click Stop to cancel generation...")
+            self.input_field.setPlaceholderText(t("placeholder_stop_generation"))
             self.input_field.setEnabled(False)  # Disable input field
         else:
             # Switch back to send mode with arrow icon
             send_icon = load_svg_icon(send_icon_path, color="#111111", size=20)
             self.send_button.setIcon(send_icon)
             if self.current_mode == "url":
-                self.send_button.setText("Open")
+                self.send_button.setText(t("btn_open"))
             else:
                 self.send_button.setText("")  # No text, icon only
             self.send_button.setProperty("stop_mode", "false")
-            self.input_field.setPlaceholderText("Enter message..." if self.current_mode != "url" else "Enter URL...")
+            self.input_field.setPlaceholderText(t("placeholder_enter_message") if self.current_mode != "url" else t("placeholder_enter_url"))
             self.input_field.setEnabled(True)  # Enable input field
             
         # Refresh style
@@ -2427,10 +2427,48 @@ class UnifiedAssistantWindow(QMainWindow):
         except Exception as e:
             print(f"⚠️ Error sending stop signal: {e}")
     
+    def retranslate_ui(self):
+        """Update all UI text after language change"""
+        # Window and title bar
+        self.setWindowTitle("GameWiki Assistant")
+        self.title_label.setText("GameWiki Assistant")
+
+        # Input placeholder (depends on current mode)
+        self._update_placeholder_for_mode()
+
+        # Button tooltips
+        self.history_button.setToolTip(t("tooltip_history"))
+        self.quick_access_button.setToolTip(t("tooltip_quick_access"))
+        self.mode_button.setToolTip(t("tooltip_search_mode"))
+        self.settings_btn.setToolTip(t("tooltip_settings"))
+        self.task_flow_button.setToolTip(t("task_flow"))
+
+        # Voice button tooltip depends on availability
+        if not is_voice_recognition_available():
+            self.voice_button.setToolTip(t("tooltip_voice_unavailable"))
+        else:
+            self.voice_button.setToolTip(t("tooltip_voice_input"))
+
+        # WikiView
+        if hasattr(self, 'wiki_view') and self.wiki_view:
+            self.wiki_view.retranslate_ui()
+
+    def _update_placeholder_for_mode(self):
+        """Update input placeholder text based on current mode"""
+        mode = getattr(self, 'current_mode', 'auto')
+        if mode == "url":
+            self.input_field.setPlaceholderText(t("placeholder_enter_url"))
+        elif mode == "wiki":
+            self.input_field.setPlaceholderText(t("placeholder_search_query"))
+        elif mode == "ai":
+            self.input_field.setPlaceholderText(t("placeholder_enter_question"))
+        else:
+            self.input_field.setPlaceholderText(t("placeholder_enter_message"))
+
     def contextMenuEvent(self, event):
         """Handle right-click menu event"""
         menu = QMenu(self)
-        
+
         # Hide to tray
         hide_action = menu.addAction(t("menu_hide_to_tray"))
         hide_action.triggered.connect(self._on_hide_to_tray)

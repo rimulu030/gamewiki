@@ -82,18 +82,12 @@ class ApiKeyMissingDialog(QDialog):
         layout.setSpacing(15)
         
         # Title
-        title_label = QLabel("AI Features Unavailable")
+        title_label = QLabel(t("dialog_ai_unavailable_title"))
         title_label.setStyleSheet("font-size: 14px; font-weight: bold; color: #d32f2f;")
         layout.addWidget(title_label)
-        
+
         # Message content
-        message = (
-            "AI guide features require both API keys to function properly:\n\n"
-            f"Missing: {', '.join(self.missing_keys)}\n\n"
-            "⚠️ Note: Gemini API alone cannot provide high-quality RAG functionality.\n"
-            "Jina vector search is essential for complete AI guide features.\n\n"
-            "You can still use Wiki search without API keys."
-        )
+        message = t("dialog_ai_unavailable_msg", keys=', '.join(self.missing_keys))
         
         message_label = QLabel(message)
         message_label.setWordWrap(True)
@@ -101,7 +95,7 @@ class ApiKeyMissingDialog(QDialog):
         layout.addWidget(message_label)
         
         # "Don't remind me again" checkbox
-        self.dont_remind_checkbox = QCheckBox("Don't remind me again (Wiki search only)")
+        self.dont_remind_checkbox = QCheckBox(t("checkbox_dont_remind"))
         self.dont_remind_checkbox.setStyleSheet("font-size: 11px;")
         layout.addWidget(self.dont_remind_checkbox)
         
@@ -110,7 +104,7 @@ class ApiKeyMissingDialog(QDialog):
         button_layout.setSpacing(10)
         
         # Configure button
-        config_button = QPushButton("Configure API Keys")
+        config_button = QPushButton(t("btn_configure_api_keys"))
         config_button.setStyleSheet("""
             QPushButton {
                 background-color: #1976d2;
@@ -128,7 +122,7 @@ class ApiKeyMissingDialog(QDialog):
         button_layout.addWidget(config_button)
         
         # Later button
-        later_button = QPushButton("Maybe Later")
+        later_button = QPushButton(t("btn_maybe_later"))
         later_button.setStyleSheet("""
             QPushButton {
                 background-color: #757575;
@@ -598,6 +592,7 @@ class GameWikiApp(QObject):
         if self.settings_window is None:
             self.settings_window = QtSettingsWindow(self.settings_mgr)
             self.settings_window.settings_applied.connect(self._on_settings_applied)
+            self.settings_window.language_changed.connect(self._on_language_changed)
             
             # 移除initial_setup处理逻辑，因为现在不会因为没有API key而强制退出
         
@@ -613,6 +608,15 @@ class GameWikiApp(QObject):
         if self.settings_window.size().width() < 600 or self.settings_window.size().height() < 500:
             self.settings_window.resize(600, 500)
             
+    def _on_language_changed(self):
+        """Handle live language change from settings combo box"""
+        # Update tray icon
+        if self.tray_icon:
+            self.tray_icon.update_text()
+        # Update main window
+        if self.assistant_ctrl and hasattr(self.assistant_ctrl, 'main_window') and self.assistant_ctrl.main_window:
+            self.assistant_ctrl.main_window.retranslate_ui()
+
     def _on_settings_applied(self):
         """Handle settings applied"""
         try:
@@ -755,7 +759,11 @@ class GameWikiApp(QObject):
             # Update tray icon text
             if self.tray_icon:
                 self.tray_icon.update_text()
-            
+
+            # Update main window text
+            if self.assistant_ctrl and hasattr(self.assistant_ctrl, 'main_window') and self.assistant_ctrl.main_window:
+                self.assistant_ctrl.main_window.retranslate_ui()
+
             # Re-register hotkey
             if self.hotkey_mgr:
                 logger.info("Re-registering hotkey...")
