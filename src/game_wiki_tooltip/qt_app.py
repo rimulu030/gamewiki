@@ -1066,4 +1066,24 @@ def main():
 
 
 if __name__ == "__main__":
-    main() 
+    try:
+        main()
+    except Exception as e:
+        import traceback
+        tb = traceback.format_exc()
+        print(tb, file=sys.stderr)
+        try:
+            import ctypes
+            ctypes.windll.user32.MessageBoxW(
+                0,
+                tb,
+                "GameWiki Assistant - 启动错误",
+                0x10,
+            )
+        except Exception:
+            pass
+        try:
+            input("\n按 Enter 键关闭...")
+        except Exception:
+            pass
+        sys.exit(1) 

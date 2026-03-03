@@ -71,13 +71,15 @@ def run_command(command, cwd=None):
 def install_dependencies():
     """Install/update dependencies"""
     print_status("Installing/updating dependencies...")
+    # 使用当前 Python 解释器执行 pip，避免 PATH 中无 pip 时失败
+    pip_cmd = f'"{sys.executable}" -m pip'
     
-    success, output = run_command("pip install --upgrade pip")
+    success, output = run_command(f"{pip_cmd} install --upgrade pip")
     if not success:
         print_error(f"Updating pip failed: {output}")
         return False
     
-    success, output = run_command("pip install -r requirements.txt")
+    success, output = run_command(f"{pip_cmd} install -r requirements.txt")
     if not success:
         print_error(f"Installing dependencies failed: {output}")
         return False
@@ -354,7 +356,7 @@ exe = EXE(
     
     # Build the uninstaller to a temporary directory first
     temp_dist = "dist_uninstaller"
-    success, output = run_command(f"pyinstaller uninstaller.spec --clean --noconfirm --distpath {temp_dist}")
+    success, output = run_command(f'"{sys.executable}" -m PyInstaller uninstaller.spec --clean --noconfirm --distpath {temp_dist}')
     
     if not success:
         print_error(f"Uninstaller build failed: {output}")
@@ -400,7 +402,7 @@ def build_exe(mode='onedir'):
     spec_file = "game_wiki_tooltip.spec"
     
     # 修改 PyInstaller 命令，直接输出到最终目录
-    success, output = run_command(f"pyinstaller {spec_file} --clean --noconfirm --distpath {final_output_dir}")
+    success, output = run_command(f'"{sys.executable}" -m PyInstaller {spec_file} --clean --noconfirm --distpath {final_output_dir}')
     
     if not success:
         print_error(f"Build failed: {output}")
@@ -453,13 +455,32 @@ def create_portable_package(mode='onedir'):
             print_error(f"Onefile build not found: {exe_path}")
             return False
     
-    # 创建 README 文档
-    readme_content = f"""# GameWiki Assistant Portable ({mode.capitalize()} Mode)
+    # 根据模式生成各语言 README 的通用片段
+    _run_hint_onedir = 'Run GameWikiAssistant/GameWikiAssistant.exe' if mode == 'onedir' else 'Double-click GameWikiAssistant.exe'
+    _run_hint_onedir_ru = 'Запустите GameWikiAssistant/GameWikiAssistant.exe' if mode == 'onedir' else 'Дважды щёлкните GameWikiAssistant.exe'
+    _run_hint_cn = '运行 GameWikiAssistant/GameWikiAssistant.exe' if mode == 'onedir' else '双击 GameWikiAssistant.exe'
+    _temp_note_onedir = 'OneDir mode runs from the install folder and does not extract temp files.' if mode == 'onedir' else 'When the app exits abnormally, temp files may be left in the system temp folder:'
+    _temp_note_onedir_ru = 'Режим OneDir запускается из папки установки и не создаёт временные файлы.' if mode == 'onedir' else 'При аварийном завершении программы во временной папке системы могут остаться файлы:'
+    _temp_note_cn = '这主要是 onefile 模式的问题。OneDir 模式不会产生临时文件。' if mode == 'onedir' else '当程序异常退出或崩溃时，可能在系统临时目录留下临时文件：'
+    _temp_list_onedir = '- OneDir mode runs from the install folder, no temp extraction.' if mode == 'onedir' else '''- Location: %TEMP%\\_MEI****** (e.g. AppData\\Local\\Temp\\_MEI260882\\)
+- These folders can be safely deleted
+- PyInstaller cleans them on normal exit
+- You may delete them periodically to free space'''
+    _temp_list_onedir_ru = '- Режим OneDir запускается из папки установки, без распаковки во временные каталоги.' if mode == 'onedir' else '''- Папка: %TEMP%\\_MEI****** (напр. AppData\\Local\\Temp\\_MEI260882\\)
+- Эти папки можно безопасно удалить
+- PyInstaller удаляет их при нормальном завершении
+- Можно периодически удалять их для освобождения места'''
+    _temp_list_cn = '- OneDir 模式直接从安装目录运行，不会解压临时文件' if mode == 'onedir' else '''- 位置：%TEMP%\\_MEI****** （如：AppData\\Local\\Temp\\_MEI260882\\）
+- 这些文件夹可以安全删除，不会影响系统运行
+- PyInstaller 在程序正常退出时会自动清理这些文件夹
+- 您可以定期手动删除这些文件夹来释放磁盘空间'''
+
+    readme_zh = f"""# GameWiki Assistant Portable ({mode.capitalize()} Mode)
 
 ## 使用说明
 
 1. **首次使用必读**：本应用程序使用 WebView2 技术，需要 Microsoft Edge WebView2 Runtime 支持。
-2. {'运行 GameWikiAssistant/GameWikiAssistant.exe' if mode == 'onedir' else '双击 GameWikiAssistant.exe'} 启动程序。
+2. {_run_hint_cn} 启动程序。
 3. 如果程序无法启动或显示白屏，请安装 WebView2 Runtime。
 4. 首次运行需要配置 API 密钥（可选）。
 5. 使用快捷键 Ctrl+Q 或设置新的快捷键来激活游戏助手功能。
@@ -515,22 +536,162 @@ def create_portable_package(mode='onedir'):
 **解决方案**：确认 WebView2 Runtime 已正确安装，重启程序
 
 ### 问题：临时文件堆积
-**说明**：{'这主要是 onefile 模式的问题。OneDir 模式不会产生临时文件。' if mode == 'onedir' else '当程序异常退出或崩溃时，可能在系统临时目录留下临时文件：'}
-{'- OneDir 模式直接从安装目录运行，不会解压临时文件' if mode == 'onedir' else '''- 位置：%TEMP%\\_MEI****** （如：AppData\\Local\\Temp\\_MEI260882\\）
-- 这些文件夹可以安全删除，不会影响系统运行
-- PyInstaller 在程序正常退出时会自动清理这些文件夹
-- 您可以定期手动删除这些文件夹来释放磁盘空间'''}
+**说明**：{_temp_note_cn}
+{_temp_list_cn}
 
 ## 技术支持
 
 如遇问题，请访问项目页面获取帮助。
 """
-    
-    readme_path = portable_dir / "README.txt"
+
+    readme_en = f"""# GameWiki Assistant Portable ({mode.capitalize()} Mode)
+
+## Instructions
+
+1. **First run**: This app uses WebView2 and requires Microsoft Edge WebView2 Runtime.
+2. {_run_hint_onedir} to start the application.
+3. If the app does not start or shows a white screen, install WebView2 Runtime.
+4. On first run you may configure API keys (optional).
+5. Use hotkey Ctrl+Q or set a custom hotkey to activate the game assistant.
+
+## Uninstall
+
+**Portable uninstall**:
+1. Run Uninstall.exe
+2. The uninstaller will remove:
+   - User data folder (%APPDATA%\\GameWikiTooltip)
+   - Desktop and Start menu shortcuts
+   - Temporary files
+   - Program folder (optional)
+3. Or simply delete the entire portable folder.
+
+## System requirements
+
+- Windows 10 or later (Windows 11 recommended)
+- 64-bit system
+- Microsoft Edge WebView2 Runtime
+
+## WebView2 Runtime installation
+
+### Windows 11
+✅ WebView2 Runtime is preinstalled; no action needed.
+
+### Windows 10
+⚠️ You need to install WebView2 Runtime:
+
+**Option 1 (recommended)** – Run the installer script:
+1. Open the runtime folder
+2. Double-click install_webview2.bat
+3. Follow the prompts
+
+**Option 2** – Manual download:
+1. Visit: https://go.microsoft.com/fwlink/p/?LinkId=2124703
+2. Download and install WebView2 Runtime
+3. Restart the application
+
+## Notes
+
+- This is a portable app; no installation required (except WebView2 Runtime).
+- Config is stored in the system AppData folder.
+- Full AI features require Gemini and Jina API keys.
+- First-time WebView2 install is about 100 MB; one-time only.
+
+## Troubleshooting
+
+### App does not start or shows white screen
+**Fix**: Install WebView2 Runtime (see above).
+
+### Video playback fails
+**Fix**: Ensure WebView2 Runtime is installed and restart the app.
+
+### Temporary files left on disk
+**Note**: {_temp_note_onedir}
+{_temp_list_onedir}
+
+## Support
+
+For help, visit the project page.
+"""
+
+    readme_ru = f"""# GameWiki Assistant Portable (режим {mode.capitalize()})
+
+## Инструкция
+
+1. **Первый запуск**: приложение использует WebView2 и требует Microsoft Edge WebView2 Runtime.
+2. {_run_hint_onedir_ru} для запуска.
+3. Если приложение не запускается или показывает белый экран — установите WebView2 Runtime.
+4. При первом запуске можно настроить API-ключи (по желанию).
+5. Используйте горячую клавишу Ctrl+Q или задайте свою для вызова игрового ассистента.
+
+## Удаление
+
+**Портативное удаление**:
+1. Запустите Uninstall.exe
+2. Удалятся:
+   - Папка данных (%APPDATA%\\GameWikiTooltip)
+   - Ярлыки на рабочем столе и в меню «Пуск»
+   - Временные файлы
+   - Папка программы (по желанию)
+3. Либо просто удалите всю портативную папку.
+
+## Системные требования
+
+- Windows 10 или новее (рекомендуется Windows 11)
+- 64-разрядная система
+- Microsoft Edge WebView2 Runtime
+
+## Установка WebView2 Runtime
+
+### Windows 11
+✅ WebView2 Runtime уже установлен; ничего делать не нужно.
+
+### Windows 10
+⚠️ Нужно установить WebView2 Runtime:
+
+**Вариант 1 (рекомендуется)** — запустите скрипт:
+1. Откройте папку runtime
+2. Дважды щёлкните install_webview2.bat
+3. Следуйте подсказкам
+
+**Вариант 2** — ручная загрузка:
+1. Откройте: https://go.microsoft.com/fwlink/p/?LinkId=2124703
+2. Скачайте и установите WebView2 Runtime
+3. Перезапустите приложение
+
+## Важно
+
+- Портативное приложение; установка не требуется (кроме WebView2 Runtime).
+- Настройки хранятся в папке AppData.
+- Полные функции ИИ требуют API-ключей Gemini и Jina.
+- Первая установка WebView2 — около 100 МБ; один раз.
+
+## Решение проблем
+
+### Приложение не запускается или белый экран
+**Решение**: Установите WebView2 Runtime (см. выше).
+
+### Не воспроизводится видео
+**Решение**: Убедитесь, что WebView2 Runtime установлен, и перезапустите приложение.
+
+### Остались временные файлы
+**Примечание**: {_temp_note_onedir_ru}
+{_temp_list_onedir_ru}
+
+## Поддержка
+
+Поддержка: страница проекта.
+"""
+
+    readme_files = [
+        (portable_dir / "README.txt", readme_zh),
+        (portable_dir / "README_en.txt", readme_en),
+        (portable_dir / "README_ru.txt", readme_ru),
+    ]
     try:
-        with open(readme_path, "w", encoding="utf-8") as f:
-            f.write(readme_content)
-        print(f"  ✓ Created: {readme_path.name}")
+        for readme_path, content in readme_files:
+            with open(readme_path, "w", encoding="utf-8") as f:
+                f.write(content)
+            print(f"  ✓ Created: {readme_path.name}")
     except Exception as e:
         print_error(f"Failed to create README: {e}")
         return False
@@ -728,7 +889,7 @@ def main():
     # Parse command line arguments
     parser = argparse.ArgumentParser(description='GameWiki Assistant Packaging Tool')
     parser.add_argument('--mode', choices=['onedir', 'onefile'], default='onedir',
-                        help='Packaging mode: onedir (faster startup) or onefile (single exe)')
+                        help='Packaging mode: onedir (folder, recommended, avoids missing DLL) or onefile (single exe)')
     parser.add_argument('--skip-deps', action='store_true',
                         help='Skip dependency installation')
     parser.add_argument('--create-installer', action='store_true',
@@ -790,7 +951,7 @@ def main():
         else:
             print(f"  - {portable_dir}/GameWikiAssistant.exe (standalone exe file)")
         print(f"  - {portable_dir}/Uninstall.exe (uninstaller)")
-        print(f"  - {portable_dir}/README.txt (user guide)")
+        print(f"  - {portable_dir}/README.txt, README_en.txt, README_ru.txt (user guide)")
         print(f"  - {portable_dir}/runtime/ (WebView2 installer)")
         
         if args.create_installer:
