@@ -9,7 +9,7 @@
 [![GitHub Release](https://img.shields.io/github/v/release/rimulu030/gamewiki?include_prereleases)](https://github.com/rimulu030/gamewiki/releases)
 
  
-👉 **[中文说明](README.zh-CN.md)** | **[Quick Start](#-quick-install)**  | **[download the newest release](https://github.com/rimulu030/gamewiki/releases/download/v0.1.1-beta/GameWikiAssistant_v0.1.1.zip)** | **[Join Our Discord](https://discord.gg/5HHjNdmYtm)**
+👉 **[中文说明](README.zh-CN.md)** | **[Русский](README.ru.md)** | **[Quick Start](#-quick-install)**  | **[download the newest release](https://github.com/rimulu030/gamewiki/releases/download/v0.1.1-beta/GameWikiAssistant_v0.1.1.zip)** | **[Join Our Discord](https://discord.gg/5HHjNdmYtm)**
 
 ## ✨ Why GameWiki?
 
