@@ -311,8 +311,8 @@ class QtSettingsWindow(QMainWindow):
                         self.finished.emit(False, t("label_chinese_model_download_failed"))
             
             self.download_thread = DownloadThread()
-            self.download_thread.progress.connect(self._update_download_progress)
-            self.download_thread.finished.connect(self._download_finished)
+            self.download_thread.progress.connect(self._update_chinese_download_progress)
+            self.download_thread.finished.connect(self._chinese_download_finished)
             self.download_thread.start()
             
         except Exception as e:
@@ -320,25 +320,127 @@ class QtSettingsWindow(QMainWindow):
             QMessageBox.critical(self, t("error"), f"Failed to download: {str(e)}")
             self.download_chinese_btn.setEnabled(True)
             self.download_progress.setVisible(False)
+            
+    def _create_russian_model_section(self):
+        """Create Russian voice model download section"""
+        widget = QWidget()
+        layout = QVBoxLayout(widget)
+        layout.setContentsMargins(0, 10, 0, 0)
+        
+        # Model status label
+        self.russian_model_status = QLabel(t("label_russian_model_not_installed"))
+        self.russian_model_status.setStyleSheet("color: #ff6b6b; font-weight: bold;")
+        layout.addWidget(self.russian_model_status)
+        
+        # Download button and progress
+        download_layout = QHBoxLayout()
+        
+        self.download_russian_btn = QPushButton(t("btn_download_russian_model_45mb"))
+        self.download_russian_btn.clicked.connect(self._download_russian_model)
+        download_layout.addWidget(self.download_russian_btn)
+        
+        self.download_progress = QProgressBar()
+        self.download_progress.setVisible(False)
+        self.download_progress.setMaximum(100)
+        download_layout.addWidget(self.download_progress)
+        
+        layout.addLayout(download_layout)
+        
+        # Info label
+        info_label = QLabel(t("label_russian_model_info"))
+        info_label.setStyleSheet("color: #666; font-size: 11px;")
+        info_label.setWordWrap(True)
+        layout.addWidget(info_label)
+        
+        return widget
     
-    def _update_download_progress(self, progress, status):
-        """Update download progress"""
+    def _download_russian_model(self):
+        """Download Russian voice model"""
+        try:
+            from src.game_wiki_tooltip.window_component.vosk_model_manager import VoskModelManager
+            
+            manager = VoskModelManager()
+            if not manager:
+                QMessageBox.warning(self, t("error"), t("label_voice_not_available"))
+                return
+            
+            # Disable button and show progress
+            self.download_russian_btn.setEnabled(False)
+            self.download_progress.setVisible(True)
+            self.russian_model_status.setText(t("label_downloading_russian_model"))
+            self.russian_model_status.setStyleSheet("color: #1971c2;")
+            
+            # Create download thread
+            from PyQt6.QtCore import QThread, pyqtSignal
+            
+            class DownloadThread(QThread):
+                progress = pyqtSignal(int, str)
+                finished = pyqtSignal(bool, str)
+                
+                def run(self):
+                    manager = VoskModelManager()
+                    def progress_callback(progress, status):
+                        self.progress.emit(int(progress), status)
+                    
+                    success = manager.download_model('russian', progress_callback)
+                    if success:
+                        self.finished.emit(True, t("label_russian_model_download_success"))
+                    else:
+                        self.finished.emit(False, t("label_russian_model_download_failed"))
+            
+            self.download_thread = DownloadThread()
+            self.download_thread.progress.connect(self._update_russian_download_progress)
+            self.download_thread.finished.connect(self._russian_download_finished)
+            self.download_thread.start()
+            
+        except Exception as e:
+            logger.error(f"Failed to start Russian model download: {e}")
+            QMessageBox.critical(self, t("error"), f"Failed to download: {str(e)}")
+            self.download_russian_btn.setEnabled(True)
+            self.download_progress.setVisible(False)
+    
+    def _update_chinese_download_progress(self, progress, status):
+        """Update Chinese download progress"""
         self.download_progress.setValue(progress)
         self.chinese_model_status.setText(status)
     
-    def _download_finished(self, success, message):
+    def _update_russian_download_progress(self, progress, status):
+        """Update Russian download progress"""
+        self.download_progress.setValue(progress)
+        self.russian_model_status.setText(status)
+    
+    def _chinese_download_finished(self, success, message):
         """Handle download completion"""
         self.download_progress.setVisible(False)
         self.download_chinese_btn.setEnabled(True)
+        self.download_russian_btn.setEnabled(True)
         
         if success:
             self.chinese_model_status.setText(t("label_chinese_model_installed"))
             self.chinese_model_status.setStyleSheet("color: #2f9e44; font-weight: bold;")
             self.download_chinese_btn.setText(t("btn_redownload_chinese_model"))
+            
             QMessageBox.information(self, t("success"), message)
         else:
             self.chinese_model_status.setText(t("label_chinese_model_not_installed"))
             self.chinese_model_status.setStyleSheet("color: #ff6b6b; font-weight: bold;")
+            QMessageBox.warning(self, t("error"), message)
+            
+    def _russian_download_finished(self, success, message):
+        """Handle download completion"""
+        self.download_progress.setVisible(False)
+        self.download_chinese_btn.setEnabled(True)
+        self.download_russian_btn.setEnabled(True)
+        
+        if success:
+            self.russian_model_status.setText(t("label_russian_model_installed"))
+            self.russian_model_status.setStyleSheet("color: #2f9e44; font-weight: bold;")
+            self.download_russian_btn.setText(t("btn_redownload_russian_model"))
+            
+            QMessageBox.information(self, t("success"), message)
+        else:
+            self.russian_model_status.setText(t("label_russian_model_not_installed"))
+            self.russian_model_status.setStyleSheet("color: #ff6b6b; font-weight: bold;")
             QMessageBox.warning(self, t("error"), message)
     
     def _check_chinese_model_status(self):
@@ -357,6 +459,23 @@ class QtSettingsWindow(QMainWindow):
                 self.download_chinese_btn.setText(t("btn_download_chinese_model_42mb"))
         except Exception as e:
             logger.error(f"Failed to check Chinese model status: {e}")
+            
+    def _check_russian_model_status(self):
+        """Check if Russian model is installed"""
+        try:
+            from src.game_wiki_tooltip.window_component.vosk_model_manager import VoskModelManager
+            
+            manager = VoskModelManager()
+            if manager.is_model_available('russian'):
+                self.russian_model_status.setText(t("label_russian_model_installed"))
+                self.russian_model_status.setStyleSheet("color: #2f9e44; font-weight: bold;")
+                self.download_russian_btn.setText(t("btn_redownload_russian_model"))
+            else:
+                self.russian_model_status.setText(t("label_russian_model_not_installed"))
+                self.russian_model_status.setStyleSheet("color: #ff6b6b; font-weight: bold;")
+                self.download_russian_btn.setText(t("btn_download_russian_model_45mb"))
+        except Exception as e:
+            logger.error(f"Failed to check Russian model status: {e}")
     
     def _populate_audio_devices(self, force_refresh=False):
         """Populate audio device combo box
@@ -872,6 +991,11 @@ class QtSettingsWindow(QMainWindow):
         audio_group_layout.addWidget(self.chinese_model_widget)
         self.chinese_model_widget.hide()  # Initially hidden
         
+        # Russian voice model download section (only shown when language is Russian)
+        self.russian_model_widget = self._create_russian_model_section()
+        audio_group_layout.addWidget(self.russian_model_widget)
+        self.russian_model_widget.hide()  # Initially hidden
+        
         layout.addWidget(self.audio_group)
         
         layout.addStretch()
@@ -1064,9 +1188,16 @@ class QtSettingsWindow(QMainWindow):
             # Show/hide Chinese model download section
             if selected_language == 'zh':
                 self.chinese_model_widget.show()
+                self.russian_model_widget.hide()
                 self._check_chinese_model_status()
+            # Show/hide Russian model download section
+            elif selected_language == 'ru':
+                self.chinese_model_widget.hide()
+                self.russian_model_widget.show()
+                self._check_russian_model_status()
             else:
                 self.chinese_model_widget.hide()
+                self.russian_model_widget.hide()
     
     def _update_ui_text(self):
         """Update all UI text with current language"""
@@ -1149,8 +1280,13 @@ class QtSettingsWindow(QMainWindow):
         if current_language == 'zh':
             self.chinese_model_widget.show()
             self._check_chinese_model_status()
+        # Check Russian model status if language is Russian
+        elif current_language == 'ru':
+            self.russian_model_widget.show()
+            self._check_russian_model_status()
         else:
             self.chinese_model_widget.hide()
+            self.russian_model_widget.hide()
         
         # Load audio device settings
         audio_device_index = settings.get('audio_device_index')

@@ -43,8 +43,10 @@ def main():
     parser = argparse.ArgumentParser(description='Download Vosk voice recognition models')
     parser.add_argument('--chinese', '-c', action='store_true', 
                         help='Download Chinese model (42 MB)')
+    parser.add_argument('--russian', '-r', action='store_true', 
+                        help='Download Russian model (45 MB)')
     parser.add_argument('--all', action='store_true',
-                        help='Download all models (English + Chinese, ~80 MB)')
+                        help='Download all models (English + Chinese + Russian, ~127 MB)')
     parser.add_argument('--list', action='store_true',
                         help='List available models and their status')
     args = parser.parse_args()
@@ -59,7 +61,12 @@ def main():
             'url': 'https://alphacephei.com/vosk/models/vosk-model-small-en-us-0.15.zip',
             'desc': 'English voice model (40 MB)',
             'lang': 'en'
-        }
+        },
+        'vosk-model-small-ru-0.22': {
+            'url': 'https://alphacephei.com/vosk/models/vosk-model-small-ru-0.22.zip',
+            'desc': 'Russian voice model (45 MB)',
+            'lang': 'ru'
+        },
     }
     
     # Target directory
@@ -81,14 +88,20 @@ def main():
     if args.all:
         models_to_download = models
         print("=== Vosk Voice Recognition Model Downloader ===")
-        print("Downloading ALL models (English + Chinese)")
-        print("Total download size: ~80 MB\n")
+        print("Downloading ALL models (English + Chinese + Russian)")
+        print("Total download size: ~127 MB\n")
     elif args.chinese:
         # Only Chinese model
         models_to_download = {k: v for k, v in models.items() if v['lang'] == 'zh'}
         print("=== Vosk Voice Recognition Model Downloader ===")
         print("Downloading Chinese model only")
         print("Total download size: ~42 MB\n")
+    elif args.russian:
+        # Only Russian model
+        models_to_download = {k: v for k, v in models.items() if v['lang'] == 'ru'}
+        print("=== Vosk Voice Recognition Model Downloader ===")
+        print("Downloading Russian model only")
+        print("Total download size: ~45 MB\n")
     else:
         # Default: only English model
         models_to_download = {k: v for k, v in models.items() if v['lang'] == 'en'}
@@ -160,6 +173,12 @@ def main():
     if chinese_model not in models_to_download and not (models_dir / chinese_model).exists():
         print("\nNote: Chinese model not installed. To download it, run:")
         print("  python download_vosk_models.py --chinese")
+        
+    # Check if Russian model is missing and user is using Russian
+    russian_model = 'vosk-model-small-ru-0.22'
+    if russian_model not in models_to_download and not (models_dir / russian_model).exists():
+        print("\nNote: Russian model not installed. To download it, run:")
+        print("  python download_vosk_models.py --russian")
 
 if __name__ == "__main__":
     main()

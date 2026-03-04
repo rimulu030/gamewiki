@@ -27,6 +27,12 @@ class VoskModelManager:
             'url': 'https://alphacephei.com/vosk/models/vosk-model-small-en-us-0.15.zip',
             'size': '40 MB',
             'lang': 'en'
+        },
+        'russian': {
+            'name': 'vosk-model-small-ru-0.22',
+            'url': 'https://alphacephei.com/vosk/models/vosk-model-small-ru-0.22.zip',
+            'size': '45 MB',
+            'lang': 'ru'
         }
     }
     
@@ -48,7 +54,7 @@ class VoskModelManager:
         """Check if a model is available locally.
         
         Args:
-            model_type: 'chinese' or 'english'
+            model_type: 'chinese' or 'english' or 'russian'
             
         Returns:
             True if model is installed, False otherwise
@@ -64,7 +70,7 @@ class VoskModelManager:
         """Get the path to a model if it exists.
         
         Args:
-            model_type: 'chinese' or 'english'
+            model_type: 'chinese' or 'english' or 'russian'
             
         Returns:
             Path to model directory or None if not found
@@ -79,7 +85,7 @@ class VoskModelManager:
         """Download a specific model.
         
         Args:
-            model_type: 'chinese' or 'english'
+            model_type: 'chinese' or 'english' or 'russian'
             progress_callback: Optional callback function(progress: int, status: str)
             
         Returns:
@@ -174,7 +180,7 @@ class VoskModelManager:
         """Download a model asynchronously in a separate thread.
         
         Args:
-            model_type: 'chinese' or 'english'
+            model_type: 'chinese' or 'english' or 'russian'
             progress_callback: Optional callback function(progress: int, status: str)
             completion_callback: Optional callback function(success: bool, message: str)
         """
@@ -193,7 +199,7 @@ class VoskModelManager:
         """Get information about a model.
         
         Args:
-            model_type: 'chinese' or 'english'
+            model_type: 'chinese' or 'english' or 'russian'
             
         Returns:
             Dictionary with model information or None if not found
