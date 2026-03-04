@@ -81,7 +81,8 @@ class VoiceRecognitionThread(QThread):
         # Model mapping
         model_names = {
             'zh': 'vosk-model-small-cn-0.22',
-            'en': 'vosk-model-small-en-us-0.15'
+            'en': 'vosk-model-small-en-us-0.15',
+            'ru': 'vosk-model-small-ru-0.22',
         }
         
         model_name = model_names.get(current_lang, model_names['en'])

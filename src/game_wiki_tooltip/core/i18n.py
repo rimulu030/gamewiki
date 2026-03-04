@@ -404,6 +404,16 @@ class TranslationManager:
             "label_chinese_model_download_success": "Chinese voice model installed successfully",
             "label_chinese_model_download_failed": "Failed to download Chinese voice model",
             "label_voice_not_available": "Voice recognition not available. Please install vosk.",
+            
+            # Russian voice model
+            "label_russian_model_not_installed": "Russian voice model not installed",
+            "label_russian_model_info": "Required for Russian voice input. Download once and use offline.",
+            "label_downloading_russian_model": "Downloading Russian voice model...",
+            "label_russian_model_installed": "Russian voice model installed",
+            "btn_redownload_russian_model": "Re-download Russian Model",
+            "btn_download_russian_model_45mb": "Download Russian Voice Model (~45MB)",
+            "label_russian_model_download_success": "Russian voice model installed successfully",
+            "label_russian_model_download_failed": "Failed to download Russian voice model",
 
             # Splash screen
             "splash_starting": "Starting...",
@@ -942,6 +952,16 @@ class TranslationManager:
                 "label_chinese_model_download_success": "Китайская голосовая модель успешно установлена",
                 "label_chinese_model_download_failed": "Не удалось скачать китайскую голосовую модель",
                 "label_voice_not_available": "Распознавание речи недоступно. Установите vosk.",
+                
+                # Русская голосовая модель
+                "label_russian_model_not_installed": "Русская голосовая модель не установлена",
+                "label_russian_model_info": "Необходима для русского голосового ввода. Скачивается один раз.",
+                "label_downloading_russian_model": "Загрузка русской голосовой модели...",
+                "label_russian_model_installed": "Русская голосовая модель установлена",
+                "btn_redownload_russian_model": "Перескачать русскую модель",
+                "btn_download_russian_model_45mb": "Скачать русскую голосовую модель (~45 МБ)",
+                "label_russian_model_download_success": "Русская голосовая модель успешно установлена",
+                "label_russian_model_download_failed": "Не удалось скачать русскую голосовую модель",
 
                 # Экран загрузки
                 "splash_starting": "Запуск...",
